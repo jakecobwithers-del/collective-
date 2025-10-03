@@ -3,319 +3,463 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Acres Panel — Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Aggro Shop — Floral Edition</title>
 <style>
   :root{
-    --bg:#0f0f11; --panel:#121214; --muted:#9aa0a6; --accent:#e63946; --glass: rgba(255,255,255,0.03);
-    --card:#0f1113; --success:#2ecc71; --danger:#ff6b6b;
+    --bg-dark:#07060a;
+    --panel:#0f0e14;
+    --accent:#ff6b6b;
+    --muted:#bdb7c8;
+    --glass: rgba(255,255,255,0.04);
+    --glass-2: rgba(255,255,255,0.02);
+    --max-width:1200px;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#060607 0%,#0f0f11 100%);color:#e8eef1;padding:2rem;}
-  .wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:2rem}
-  /* Admin panel */
-  .panel{background:var(--panel);padding:1.25rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
-  h1{font-size:18px;margin:0 0 12px 0;font-weight:800;letter-spacing:0.6px}
-  label{display:block;font-size:13px;color:var(--muted);margin-top:10px}
-  input[type="text"], input[type="number"], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:#fff;margin-top:6px}
-  textarea{min-height:80px;resize:vertical}
-  .row{display:flex;gap:8px}
-  .btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  .small{font-size:13px;padding:8px 10px}
-  .uploads-preview{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
-  .preview{width:100%;height:160px;border-radius:8px;object-fit:cover;background:#09090a;border:1px dashed rgba(255,255,255,0.03)}
-  .meta{font-size:12px;color:var(--muted);margin-top:8px}
 
-  /* Storefront */
-  .store{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
-  .card{background:var(--card);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column}
-  .card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
-  .card h3{margin:10px 0 6px 0;font-size:16px}
-  .price{font-weight:700;color:#fff}
-  .muted{color:var(--muted);font-size:13px}
-  .badges{display:flex;gap:8px;align-items:center;margin-top:8px}
-  .badge{padding:6px 8px;border-radius:8px;font-size:12px;background:rgba(255,255,255,0.03);color:var(--muted)}
-  .stock-low{background:linear-gradient(90deg,#33221a, #3b1f1f);color:#ffddcc}
-  .controls{display:flex;gap:8px;margin-top:10px}
-  .controls .btn{flex:1}
+  html,body{height:100%;margin:0;background:var(--bg-dark);color:#eee}
+  .wrap{min-height:100vh;display:flex;align-items:stretch;justify-content:center;padding:48px 20px;box-sizing:border-box}
+  .container{width:100%;max-width:var(--max-width);display:grid;grid-template-columns:320px 1fr;gap:28px;align-items:start}
 
-  /* utilities */
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-  .search{width:320px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:#fff}
-  .full{grid-column:1/-1}
-  footer{margin-top:1rem;color:var(--muted);font-size:13px;text-align:center}
-  @media (max-width:980px){.wrap{grid-template-columns:1fr;}.store{grid-template-columns:1fr}}
+  /* Side panel */
+  .side{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    padding:20px;border-radius:12px;backdrop-filter: blur(6px);position:relative;overflow:hidden;
+  }
+  .logo{
+    display:flex;align-items:center;gap:12px;cursor:pointer;
+  }
+  .logo img{width:64px;height:64px;object-fit:contain;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+  .brand{font-weight:700;font-size:18px;line-height:1;color:#fff}
+  .tagline{color:var(--muted);font-size:13px;margin-top:6px}
+  .side p.short{margin:16px 0 12px;color:var(--muted);font-size:13px;line-height:1.45}
+  .filters{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{padding:8px 10px;background:var(--glass);border-radius:8px;color:var(--muted);font-size:13px;border:1px solid rgba(255,255,255,0.03);cursor:pointer;user-select:none}
+  .tag.active{background:linear-gradient(90deg, rgba(255,107,107,0.12), rgba(255,255,255,0.02));color:var(--accent);border-color:rgba(255,107,107,0.18)}
+  .search{margin-top:12px;display:flex;gap:8px}
+  .search input{flex:1;padding:10px 12px;border-radius:8px;background:var(--glass-2);border:1px solid rgba(255,255,255,0.03);color:#fff}
+  .search button{padding:10px 12px;border-radius:8px;background:var(--accent);color:#111;border:none;cursor:pointer;font-weight:600}
+  .cart-mini{position:absolute;right:16px;top:16px;background:rgba(0,0,0,0.4);padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);display:flex;gap:10px;align-items:center}
+  .cart-mini strong{color:#fff}
+
+  /* Main area */
+  .main{
+    background:linear-gradient(180deg, rgba(16,15,19,0.5), rgba(8,7,10,0.6));
+    border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;
+    min-height:60vh;
+  }
+  .bg-video{
+    position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.08;object-fit:cover;width:100%;height:100%;filter:grayscale(10%) contrast(90%);
+  }
+  .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2}
+  .headline{font-size:28px;font-weight:800;letter-spacing:-0.02em}
+  .subtle{color:var(--muted);font-size:14px}
+  .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:18px;position:relative;z-index:2}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:10px;min-height:220px}
+  .thumb{height:120px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#1b1a1f,#111012);display:flex;align-items:center;justify-content:center}
+  .thumb img{max-width:100%;max-height:100%;object-fit:cover}
+  .title{font-weight:700}
+  .desc{color:var(--muted);font-size:13px;flex:1}
+  .price-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .price{font-weight:800;color:var(--accent)}
+  .btn{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(180deg,var(--accent),#ff4b4b);color:#111;cursor:pointer;font-weight:700}
+  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+  .tagline-pill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:var(--muted)}
+
+  /* Cart modal */
+  .cart-overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(3,3,6,0.6),rgba(3,3,6,0.85));display:flex;align-items:center;justify-content:center;padding:30px;z-index:40;visibility:hidden;opacity:0;transition:all .18s ease}
+  .cart-overlay.open{visibility:visible;opacity:1}
+  .cart-panel{width:100%;max-width:720px;background:#0b0a0d;border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+  .cart-items{display:flex;flex-direction:column;gap:12px;max-height:320px;overflow:auto;padding-right:6px;margin-top:10px}
+  .cart-item{display:flex;gap:12px;align-items:center}
+  .cart-item img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+  .cart-item .meta{flex:1}
+  .cart-actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+  .checkout{background:linear-gradient(90deg,var(--accent),#ff4b4b);color:#111;padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer}
+
+  /* small screens */
+  @media (max-width:880px){
+    .container{grid-template-columns:1fr;gap:16px}
+    .side{order:2}
+    .main{order:1}
+  }
+
+  /* subtle animations */
+  .logo:hover{transform:translateY(-3px);transition:transform .12s ease}
+  .card{transition:transform .14s ease, box-shadow .14s ease}
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,0,0,0.6)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <aside class="panel" aria-labelledby="adminTitle">
-    <h1 id="adminTitle">Admin Upload Panel</h1>
+  <div class="container">
 
-    <label>Title</label>
-    <input id="title" type="text" placeholder="Item title e.g., Rusted Ammo Crate">
+    <!-- Side panel -->
+    <aside class="side" id="sidePanel">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="logo" id="logoBtn" title="Toggle cinematic background and panel">
+          <img src="flower.png" alt="logo" id="logoImg" />
+          <div>
+            <div class="brand">Aggro Shop</div>
+            <div class="tagline">Bold, gritty merch & cinematic vibes</div>
+          </div>
+        </div>
 
-    <label>Price (AUD)</label>
-    <input id="price" type="number" step="0.01" placeholder="49.00">
+        <div class="cart-mini" id="cartMini" title="Open cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.9"><path d="M3 3h2l.4 2M7 13h10l3-8H6.4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong id="cartCount">0</strong> items</div>
+        </div>
+      </div>
 
-    <label>Stock</label>
-    <input id="stock" type="number" min="0" placeholder="12">
+      <p class="short">Welcome. This is a compact storefront layout designed for cinematic branding. Click the logo to toggle the background video and side styles, or use the filters below to narrow products.</p>
 
-    <label>Short description</label>
-    <textarea id="desc" placeholder="One-line description"></textarea>
+      <div class="filters" aria-hidden="false">
+        <div style="font-weight:700;font-size:13px;color:#fff">Filter by tag</div>
+        <div class="tags" id="tagList">
+          <!-- tags inserted by JS -->
+        </div>
 
-    <label>Image (jpg, png) — preview shows local upload</label>
-    <input id="image" type="file" accept="image/*">
+        <div class="search" style="margin-top:10px">
+          <input id="searchInput" placeholder="Search products by name or description" />
+          <button id="clearBtn" class="btn secondary">Clear</button>
+        </div>
+      </div>
 
-    <div class="meta">Max local persistence: <strong>localStorage</strong>. Use export to move data to GitHub or a backend later.</div>
+      <div style="margin-top:16px">
+        <div style="font-weight:700;color:#fff;font-size:13px">Quick add product (dev)</div>
+        <form id="quickForm" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+          <input name="name" placeholder="Name" required style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
+          <input name="price" placeholder="Price (AUD)" required style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
+          <input name="tags" placeholder="Tags (comma separated)" style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
+          <button class="btn" type="submit">Add product</button>
+        </form>
+      </div>
+    </aside>
 
-    <div style="margin-top:12px;" class="row">
-      <button class="btn" id="uploadBtn">Upload Listing</button>
-      <button class="btn ghost small" id="clearBtn">Clear form</button>
-    </div>
+    <!-- Main area -->
+    <main class="main">
+      <!-- background video -->
+      <video id="bgVideo" class="bg-video" muted loop playsinline>
+        <source src="flower.mp4" type="video/mp4">
+      </video>
 
-    <div style="margin-top:12px;" class="row">
-      <button class="btn ghost small" id="exportJson">Export JSON</button>
-      <button class="btn ghost small" id="exportCsv">Export CSV</button>
-    </div>
-
-    <div class="meta" style="margin-top:14px">Tips: commit exported JSON to GitHub, hook a tiny backend (Firebase/Netlify Function) for real hosting, or use Shopify theme integration to deploy storefront assets.</div>
-  </aside>
-
-  <main>
-    <div class="panel" style="margin-bottom:1rem;">
-      <div class="topbar">
+      <div class="header-row">
         <div>
-          <h1 style="font-size:16px;margin:0">Storefront</h1>
-          <div class="muted">Manage listings and preview live</div>
+          <div class="headline">Merch, prints & more</div>
+          <div class="subtle">Curated merch built for dramatic presentation. Filter by tag or search to narrow results.</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="q" class="search" placeholder="Search title or description">
-          <button id="newListingBtn" class="btn ghost small">New listing</button>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="tagline-pill" id="activeFilter">Showing: all</div>
+          <button class="btn secondary" id="viewAllBtn">Reset</button>
         </div>
       </div>
 
-      <div id="listCount" class="muted" style="margin-bottom:8px">0 items</div>
+      <section class="products" id="productsGrid" aria-live="polite">
+        <!-- product cards inserted by JS -->
+      </section>
+    </main>
 
-      <div id="storeGrid" class="store"></div>
-    </div>
-
-    <div class="panel">
-      <h1 style="font-size:16px;margin:0 0 10px 0">Cart (demo)</h1>
-      <div id="cart" class="muted">Cart is empty</div>
-      <div style="margin-top:12px">
-        <button id="clearAll" class="btn ghost small">Delete all listings</button>
-      </div>
-    </div>
-  </main>
+  </div>
 </div>
 
-<footer>Single-file shop • Local storage demo • Export to move into GitHub</footer>
+<!-- Cart overlay -->
+<div class="cart-overlay" id="cartOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="cart-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-weight:800;font-size:16px">Your cart</div>
+      <button id="closeCart" class="btn secondary">Close</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-actions">
+      <div style="color:var(--muted)">Total: <strong id="cartTotal">AUD 0.00</strong></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn secondary" id="clearCart">Clear</button>
+        <button class="checkout" id="checkoutBtn">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-/* ========== Data model & persistence ========== */
-const LS_KEY = 'acres_listings_v1';
-let listings = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+/* --- Sample initial product data --- */
+const PRODUCTS = [
+  { id: 'p1', name: 'Ash Rose Tee', price: 39.00, tags: ['apparel','tee','floral'], img: 'https://picsum.photos/seed/ash/640/480', desc: 'Soft cotton tee with distressed floral logo.' },
+  { id: 'p2', name: 'Petal Patch Cap', price: 29.00, tags: ['apparel','cap','accessory'], img: 'https://picsum.photos/seed/cap/640/480', desc: 'One-size cap, reinforced stitch, embroidered logo.' },
+  { id: 'p3', name: 'Floral Sticker Pack', price: 9.00, tags: ['sticker','accessory'], img: 'https://picsum.photos/seed/sticker/640/480', desc: 'Set of 6 weatherproof stickers.' },
+  { id: 'p4', name: 'Limited Print 1', price: 85.00, tags: ['print','art','limited'], img: 'https://picsum.photos/seed/print/640/480', desc: 'Signed, numbered print with distressed finish.' },
+  { id: 'p5', name: 'Patchwork Hoodie', price: 99.00, tags: ['apparel','hoodie'], img: 'https://picsum.photos/seed/hoodie/640/480', desc: 'Heavyweight hoodie with raw hem details.' }
+];
 
-/* Utility: save */
-function saveListings(){ localStorage.setItem(LS_KEY, JSON.stringify(listings)); renderStore(); }
+/* Application state */
+let state = {
+  products: JSON.parse(JSON.stringify(PRODUCTS)),
+  activeTags: new Set(),
+  query: '',
+  cart: {} // id => {product, qty}
+};
 
-/* ========== DOM refs ========== */
-const titleEl = document.getElementById('title');
-const priceEl = document.getElementById('price');
-const stockEl = document.getElementById('stock');
-const descEl = document.getElementById('desc');
-const imageEl = document.getElementById('image');
-const uploadBtn = document.getElementById('uploadBtn');
+/* DOM refs */
+const tagList = document.getElementById('tagList');
+const productsGrid = document.getElementById('productsGrid');
+const searchInput = document.getElementById('searchInput');
 const clearBtn = document.getElementById('clearBtn');
-const storeGrid = document.getElementById('storeGrid');
-const listCount = document.getElementById('listCount');
-const exportJson = document.getElementById('exportJson');
-const exportCsv = document.getElementById('exportCsv');
-const q = document.getElementById('q');
-const clearAll = document.getElementById('clearAll');
+const cartMini = document.getElementById('cartMini');
+const cartOverlay = document.getElementById('cartOverlay');
+const cartItemsEl = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+const cartCountEl = document.getElementById('cartCount');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const closeCart = document.getElementById('closeCart');
+const clearCart = document.getElementById('clearCart');
+const activeFilter = document.getElementById('activeFilter');
+const viewAllBtn = document.getElementById('viewAllBtn');
+const logoBtn = document.getElementById('logoBtn');
+const bgVideo = document.getElementById('bgVideo');
+const quickForm = document.getElementById('quickForm');
 
-/* ========== Helpers ========== */
-function uid(){ return 'id_' + Math.random().toString(36).slice(2,9); }
-function formatPrice(n){ return new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD'}).format(n); }
+/* Helper utilities */
+function formatPrice(v){ return 'AUD ' + v.toFixed(2); }
+function uniqTags(products){
+  const s = new Set();
+  products.forEach(p => (p.tags || []).forEach(t => s.add(t)));
+  return Array.from(s).sort();
+}
 
-/* ========== Image handling: read as data URL so items persist locally ========== */
-function readImageFile(file){
-  return new Promise((res, rej) => {
-    if(!file) return res(null);
-    const r = new FileReader();
-    r.onload = ()=>res(r.result);
-    r.onerror = ()=>rej('read error');
-    r.readAsDataURL(file);
+/* Rendering */
+function renderTags(){
+  tagList.innerHTML = '';
+  const tags = uniqTags(state.products);
+  if(tags.length===0) { tagList.innerHTML = '<div style="color:var(--muted)">No tags</div>'; return; }
+  tags.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'tag' + (state.activeTags.has(t) ? ' active' : '');
+    el.textContent = t;
+    el.onclick = ()=> {
+      if(state.activeTags.has(t)) state.activeTags.delete(t); else state.activeTags.add(t);
+      render();
+    };
+    tagList.appendChild(el);
   });
 }
 
-/* ========== Render store ========== */
-function renderStore(){
-  const qv = q.value.trim().toLowerCase();
-  const filtered = listings.filter(it => {
-    if(!qv) return true;
-    return (it.title + ' ' + it.description).toLowerCase().includes(qv);
-  });
+function productMatches(p){
+  // tag filter
+  if(state.activeTags.size>0){
+    const has = [...state.activeTags].every(t => p.tags.includes(t));
+    if(!has) return false;
+  }
+  // search query
+  if(state.query){
+    const q = state.query.toLowerCase();
+    if(!(p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))) return false;
+  }
+  return true;
+}
 
-  storeGrid.innerHTML = '';
-  listCount.textContent = `${filtered.length} items`;
-
-  if(filtered.length === 0){
-    storeGrid.innerHTML = '<div class="muted">No items yet. Use the Admin Upload Panel to add listings.</div>';
+function renderProducts(){
+  productsGrid.innerHTML = '';
+  const visible = state.products.filter(productMatches);
+  if(visible.length === 0){
+    productsGrid.innerHTML = '<div style="color:var(--muted);padding:20px">No products found. Try clearing filters.</div>';
+    activeFilter.textContent = 'Showing: none';
     return;
   }
-
-  filtered.forEach(item => {
-    const card = document.createElement('div'); card.className = 'card';
+  activeFilter.textContent = 'Showing: ' + visible.length;
+  visible.forEach(p => {
+    const card = document.createElement('article');
+    card.className = 'card';
     card.innerHTML = `
-      <div style="position:relative">
-        <img src="${item.image || placeholderData(item.title)}" alt="${escapeHtml(item.title)}">
-      </div>
-      <h3>${escapeHtml(item.title)}</h3>
-      <div class="muted">${escapeHtml(item.description)}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-        <div>
-          <div class="price">${formatPrice(item.price)}</div>
-          <div class="muted">SKU: ${item.id}</div>
+      <div class="thumb"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="title">${p.name}</div>
+      <div class="desc">${p.desc}</div>
+      <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+        <div style="display:flex;gap:8px;align-items:center"><div class="tagline-pill">${(p.tags||[]).join(', ')}</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="price">${formatPrice(p.price)}</div>
+          <button class="btn" data-id="${p.id}">Buy</button>
         </div>
-        <div class="badges">
-          <div class="badge ${item.stock <= 3 ? 'stock-low' : ''}">Stock: ${item.stock}</div>
-        </div>
-      </div>
-      <div class="controls">
-        <button class="btn" data-action="buy" data-id="${item.id}">Add to cart</button>
-        <button class="btn ghost small" data-action="edit" data-id="${item.id}">Edit</button>
-        <button class="btn ghost small" data-action="delete" data-id="${item.id}">Delete</button>
       </div>
     `;
-    storeGrid.appendChild(card);
+    productsGrid.appendChild(card);
   });
 
-  // attach events (delegation would be fine; we attach per item for clarity)
-  storeGrid.querySelectorAll('button[data-action]').forEach(btn=>{
-    btn.onclick = () => {
-      const action = btn.dataset.action;
-      const id = btn.dataset.id;
-      if(action === 'buy') addToCart(id);
-      if(action === 'edit') beginEdit(id);
-      if(action === 'delete') removeItem(id);
-    };
+  // attach buy handlers
+  productsGrid.querySelectorAll('.btn[data-id]').forEach(b => {
+    b.addEventListener('click', (e)=> {
+      const id = e.currentTarget.dataset.id;
+      addToCart(id,1);
+    });
   });
 }
 
-/* ========== Placeholder image generator (simple SVG data url) ========== */
-function placeholderData(text){ 
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><rect width='100%' height='100%' fill='#111'/><text x='50%' y='50%' fill='#666' font-size='24' dominant-baseline='middle' text-anchor='middle' font-family='Inter, Arial'>${escapeHtml(text||'No image')}</text></svg>`;
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-}
-
-/* ========== CRUD operations ========== */
-async function uploadListing(editId){
-  const title = titleEl.value.trim();
-  const price = parseFloat(priceEl.value) || 0;
-  const stock = parseInt(stockEl.value) || 0;
-  const description = descEl.value.trim();
-  const file = imageEl.files[0];
-
-  if(!title){ alert('Enter a title'); return; }
-  if(price <= 0){ if(!confirm('Price is zero or invalid. Continue?')) return; }
-
-  const imgData = await readImageFile(file);
-
-  if(editId){
-    const idx = listings.findIndex(x=>x.id === editId);
-    if(idx === -1) return alert('Item not found');
-    listings[idx] = Object.assign({}, listings[idx], {title, price, stock, description, image: imgData || listings[idx].image});
-  } else {
-    const item = { id: uid(), title, price, stock, description, image: imgData || null, createdAt: Date.now() };
-    listings.unshift(item);
+function renderCart(){
+  cartItemsEl.innerHTML = '';
+  const entries = Object.values(state.cart);
+  if(entries.length === 0){
+    cartItemsEl.innerHTML = '<div style="color:var(--muted)">Your cart is empty.</div>';
+    cartTotalEl.textContent = formatPrice(0);
+    cartCountEl.textContent = '0';
+    return;
   }
+  let total = 0;
+  let count = 0;
+  entries.forEach(entry => {
+    const li = document.createElement('div');
+    li.className = 'cart-item';
+    li.innerHTML = `
+      <img src="${entry.product.img}" alt="${entry.product.name}" />
+      <div class="meta">
+        <div style="font-weight:700">${entry.product.name}</div>
+        <div style="color:var(--muted);font-size:13px">${formatPrice(entry.product.price)} × ${entry.qty}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn secondary" data-action="dec" data-id="${entry.product.id}">-</button>
+        <div style="min-width:28px;text-align:center">${entry.qty}</div>
+        <button class="btn" data-action="inc" data-id="${entry.product.id}">+</button>
+      </div>
+    `;
+    cartItemsEl.appendChild(li);
+    total += entry.product.price * entry.qty;
+    count += entry.qty;
+  });
+  cartTotalEl.textContent = formatPrice(total);
+  cartCountEl.textContent = String(count);
 
-  saveListings();
-  resetForm();
+  // handlers
+  cartItemsEl.querySelectorAll('button[data-action]').forEach(btn=>{
+    btn.addEventListener('click', e => {
+      const id = e.currentTarget.dataset.id;
+      const action = e.currentTarget.dataset.action;
+      if(action==='inc') addToCart(id,1);
+      if(action==='dec') removeFromCart(id,1);
+      renderCart();
+    });
+  });
 }
 
-function resetForm(){
-  titleEl.value=''; priceEl.value=''; stockEl.value=''; descEl.value=''; imageEl.value='';
-  uploadBtn.textContent = 'Upload Listing';
-  uploadBtn.dataset.edit = '';
+/* Cart actions */
+function addToCart(id, qty=1){
+  const product = state.products.find(p => p.id === id);
+  if(!product) return;
+  if(!state.cart[id]) state.cart[id] = {product: product, qty: 0};
+  state.cart[id].qty += qty;
+  if(state.cart[id].qty < 1) delete state.cart[id];
+  renderCart();
+  // show overlay briefly
+  cartOverlay.classList.add('open');
+  cartOverlay.setAttribute('aria-hidden','false');
 }
 
-function beginEdit(id){
-  const it = listings.find(x=>x.id===id);
-  if(!it) return alert('Listing not found');
-  titleEl.value = it.title;
-  priceEl.value = it.price;
-  stockEl.value = it.stock;
-  descEl.value = it.description;
-  uploadBtn.textContent = 'Save Changes';
-  uploadBtn.dataset.edit = id;
-  window.scrollTo({top:0,behavior:'smooth'});
+function removeFromCart(id, qty=1){
+  if(!state.cart[id]) return;
+  state.cart[id].qty -= qty;
+  if(state.cart[id].qty <= 0) delete state.cart[id];
 }
 
-function removeItem(id){
-  if(!confirm('Delete this listing?')) return;
-  listings = listings.filter(x=>x.id!==id);
-  saveListings();
-}
-
-function addToCart(id){
-  const it = listings.find(x=>x.id===id);
-  if(!it) return;
-  alert(`Added "${it.title}" to cart (demo).`);
-}
-
-/* ========== Export / Import ========== */
-exportJson.addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(listings, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'listings.json'; a.click(); URL.revokeObjectURL(url);
+/* UI events */
+searchInput.addEventListener('input', e => {
+  state.query = e.target.value.trim();
+  render();
+});
+clearBtn.addEventListener('click', e => {
+  state.query = '';
+  searchInput.value = '';
+  state.activeTags.clear();
+  render();
+});
+viewAllBtn.addEventListener('click', ()=> {
+  state.query = '';
+  searchInput.value = '';
+  state.activeTags.clear();
+  render();
 });
 
-exportCsv.addEventListener('click', ()=>{
-  if(listings.length===0){ alert('No items'); return; }
-  const header = ['id','title','price','stock','description','imageDataURL'];
-  const rows = listings.map(it => header.map(h => `"${(it[h]||'').toString().replace(/"/g,'""')}"`).join(','));
-  const csv = [header.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'}); const url = URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='listings.csv'; a.click(); URL.revokeObjectURL(url);
+cartMini.addEventListener('click', ()=> {
+  cartOverlay.classList.add('open');
+  cartOverlay.setAttribute('aria-hidden','false');
+  renderCart();
+});
+closeCart.addEventListener('click', ()=> {
+  cartOverlay.classList.remove('open');
+  cartOverlay.setAttribute('aria-hidden','true');
+});
+clearCart.addEventListener('click', ()=> {
+  state.cart = {};
+  renderCart();
 });
 
-/* ========== Events ========== */
-uploadBtn.addEventListener('click', ()=> uploadListing(uploadBtn.dataset.edit || '') );
-clearBtn.addEventListener('click', resetForm);
-q.addEventListener('input', renderStore);
-clearAll.addEventListener('click', ()=> {
-  if(!confirm('Delete ALL listings? This is permanent for localStorage.')) return;
-  listings = []; saveListings();
+checkoutBtn.addEventListener('click', ()=> {
+  // mock checkout behaviour
+  if(Object.keys(state.cart).length === 0){
+    alert('Cart is empty.');
+    return;
+  }
+  // in real site you'd integrate Stripe/Shop backend here
+  alert('Checkout simulated. Replace with real payment integration.');
+  state.cart = {};
+  renderCart();
+  cartOverlay.classList.remove('open');
+  cartOverlay.setAttribute('aria-hidden','true');
 });
 
-/* ========== small helpers ========== */
-function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+/* Toggle cinematic background and side style via logo */
+let bgPlaying = false;
+logoBtn.addEventListener('click', ()=> {
+  bgPlaying = !bgPlaying;
+  if(bgPlaying){
+    bgVideo.play().catch(()=>{}); // attempt play
+    document.getElementById('sidePanel').style.transform = 'translateX(0)';
+    document.getElementById('sidePanel').style.boxShadow = '0 18px 48px rgba(0,0,0,0.6)';
+  } else {
+    bgVideo.pause();
+    document.getElementById('sidePanel').style.boxShadow = 'none';
+  }
+});
 
-/* ========== Init render ========== */
-renderStore();
-
-/* ========== Optional: import from JSON file (developer convenience) ========== */
-/* Uncomment and add a file input in the DOM if you want to import json files into localStorage */
-
-/*
-const importBtn = document.createElement('button');
-importBtn.textContent='Import JSON';
-importBtn.className='btn ghost small';
-importBtn.onclick = async () => {
-  const input = document.createElement('input'); input.type='file'; input.accept='application/json';
-  input.onchange = async ()=> {
-    const f = input.files[0]; if(!f) return;
-    const txt = await f.text(); try{ const arr = JSON.parse(txt); if(Array.isArray(arr)){ listings = arr; saveListings(); alert('Imported'); }else alert('Invalid JSON'); }catch(e){ alert('Parse error'); }
+/* Quick-add dev form to add products on the fly */
+quickForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(quickForm);
+  const name = fd.get('name').trim();
+  const price = parseFloat(fd.get('price')) || 0;
+  const tags = fd.get('tags').split(',').map(s=>s.trim()).filter(Boolean);
+  const newP = {
+    id: 'p' + Date.now(),
+    name, price, tags, img: 'https://picsum.photos/seed/' + encodeURIComponent(name) + '/640/480',
+    desc: 'New item added from quick form.'
   };
-  input.click();
-};
-document.querySelector('aside.panel').appendChild(importBtn);
-*/
+  state.products.unshift(newP);
+  quickForm.reset();
+  render();
+});
 
+/* Initial render */
+function render(){
+  renderTags();
+  renderProducts();
+  renderCart();
+}
+render();
+
+/* Accessibility: close cart on overlay click */
+cartOverlay.addEventListener('click', e => {
+  if(e.target === cartOverlay){
+    cartOverlay.classList.remove('open');
+    cartOverlay.setAttribute('aria-hidden','true');
+  }
+});
+
+/* Small enhancement: keyboard shortcuts */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'k' && (e.ctrlKey || e.metaKey)){
+    e.preventDefault();
+    searchInput.focus();
+  }
+});
 </script>
 </body>
 </html>
