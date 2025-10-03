@@ -11,212 +11,93 @@
   <style>
     /* RESET & BASE */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #ffe4f8 url('pedals.png') repeat;
-      background-size: 200px 200px;
-      animation: flow 30s linear infinite;
-      color: #333;
-    }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    body { background: #ffe4f8; color: #333; }
+
+    /* SPLIT-PANE BACKGROUND */
     @keyframes flow {
       from { background-position: 0 0; }
       to   { background-position: 0 1000px; }
     }
-    a { text-decoration: none; color: inherit; }
+    .bg-left, .bg-right {
+      position: fixed; top: 0; width: 50%; height: 100vh;
+      background: url('pedals.png') repeat;
+      background-size: 300px 300px;
+      animation: flow 20s linear infinite;
+      z-index: -1;
+    }
+    .bg-left { left: 0 }
+    .bg-right { right: 0 }
 
     /* HERO */
     #hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 80vh;
-      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 80vh; text-align: center;
       padding: 0 20px;
-      position: relative;
-      z-index: 1;
     }
     #hero .logo {
-      width: 350px;
-      max-width: 80%;
+      width: 400px; max-width: 80%;
       margin-bottom: 24px;
     }
     #hero h1 {
-      font-size: 3.5rem;
-      color: #c83b7a;
+      font-size: 3.5rem; color: #c83b7a;
       margin-bottom: 12px;
     }
     #hero p {
-      font-size: 1.2rem;
-      margin-bottom: 24px;
+      font-size: 1.2rem; margin-bottom: 24px;
       max-width: 600px;
     }
     #hero .cta {
       display: inline-block;
       padding: 14px 32px;
-      background: #c83b7a;
-      color: #fff;
+      background: #c83b7a; color: #fff;
       border-radius: 8px;
       font-weight: 700;
       transition: background 0.2s;
     }
     #hero .cta:hover { background: #a22e60; }
 
-    /* INSTAGRAM FEED (Instafeed.js) */
-    #insta-feed {
-      max-width: 800px;
-      margin: 0 auto 60px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-      gap: 16px;
-    }
-    #insta-feed img {
-      width: 100%;
-      display: block;
-      border-radius: 12px;
-    }
-
-    /* WHAT'S HOT */
-    #hot {
-      max-width: 1000px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
-    }
-    #hot h2 {
-      font-size: 2rem;
-      color: #c83b7a;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    #hot .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
-      gap: 12px;
-    }
-    #hot .grid img {
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* ABOUT */
-    #about {
-      max-width: 800px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
-      line-height: 1.6;
-    }
-    #about h2 {
-      font-size: 2rem;
-      color: #c83b7a;
-      margin-bottom: 12px;
-    }
-    #about p {
-      margin-bottom: 12px;
-    }
-
-    /* SOCIAL WIDGETS */
-    #social {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 60px;
-    }
-    .widget {
-      flex: 1 1 280px;
-      max-width: 320px;
-    }
-
+    /* SOCIAL ICONS FOOTER */
     footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 0.9rem;
-      color: #777;
+      display: flex; justify-content: center;
+      gap: 24px; padding: 24px 0;
+      background: rgba(255,255,255,0.8);
     }
+    footer a {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #c83b7a; transition: color 0.2s;
+    }
+    footer a:hover { color: #a22e60; }
+    footer svg { width: 24px; height: 24px; fill: currentColor; }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
+  <div class="bg-left"></div>
+  <div class="bg-right"></div>
+
   <section id="hero">
     <img src="Flower.PNG" alt="Luxe Lab Collective Logo" class="logo"/>
     <h1>Luxe Lab Collective</h1>
-    <p>Shop our hand-packed lip-glosses, scrunchies, mini hair clips & more—curated with passion.</p>
-    <a href="#insta-feed" class="cta">See Latest IG Video</a>
+    <p>Hand-packed lip-glosses, scrunchies, mini hair clips & more—curated with passion.</p>
+    <a href="shop.html" class="cta">Shop Now</a>
   </section>
 
-  <!-- INSTAGRAM FEED -->
-  <section id="insta-feed"></section>
-
-  <!-- WHAT'S HOT -->
-  <section id="hot">
-    <h2>What's Hot</h2>
-    <div class="grid">
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9778.jpg?v=1758514351" alt="Rainbow Bear Keychain"/>
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9773.jpg?v=1758513980" alt="BeachCore Keychain"/>
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/4A60AADF-9A2C-44DD-B103-F6BF2828D63B.jpg?v=1758678639" alt="Heart Keychain"/>
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9795.jpg?v=1758639222" alt="Scrunchies"/>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <h2>About Luxe Lab Collective</h2>
-    <p><strong>Luxe Lip Glosses ~ A Flawless Finish for Every Face. 💎Hand-Packed | Affordable</strong></p>
-    <p>Welcome to LuxeLab Collective, where beauty meets bold confidence.</p>
-    <h3>About My Business</h3>
-    <p>At LuxeLab Collective, I specialise in creating and selling lip-products and other small beauty items. I'm fifteen and I run, own, and pack every order with love.</p>
-    <h3>More Info</h3>
-    <p>LuxeLab Collective is your destination for high-quality, hand-packed lip-glosses and other luxury lip-products made to elevate your everyday look. My goal? To help you feel confident, radiant, and unapologetically YOU.</p>
-    <h3>💄 Glosses That Glow</h3>
-    <p>From ultra-glossy to subtle shimmer, our lip-glosses are lightweight, hydrating, and designed to keep your lips moist and luxurious. There's something for everyone at LuxeLab.</p>
-  </section>
-
-  <!-- SOCIAL WIDGETS -->
-  <section id="social">
-    <!-- Instagram embed (requires your userId & accessToken) -->
-    <div class="widget">
-      <h3>Instagram</h3>
-      <div id="instafeed-widget"></div>
-    </div>
-
-    <!-- TikTok embed -->
-    <div class="widget">
-      <h3>TikTok</h3>
-      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@luxelabcollective" data-embed-from="oembed" style="max-width:320px;">
-        <section><a href="https://www.tiktok.com/@luxelabcollective">@luxelabcollective</a></section>
-      </blockquote>
-    </div>
-
-    <!-- Pinterest embed -->
-    <div class="widget">
-      <h3>Pinterest</h3>
-      <a data-pin-do="embedBoard" data-pin-board-width="320" data-pin-scale-height="240"
-         href="https://au.pinterest.com/luxelabcollective/"></a>
-    </div>
-  </section>
-
-  <footer>&copy; 2025 Luxe Lab Collective. All rights reserved.</footer>
-
-  <!-- SCRIPTS -->
-  <!-- Instafeed.js (to fetch your latest IG media) -->
-  <script src="https://cdn.jsdelivr.net/npm/instafeed.js@2"></script>
-  <script>
-    const feed = new Instafeed({
-      get: 'user',
-      userId: 'YOUR_USER_ID',
-      accessToken: 'YOUR_ACCESS_TOKEN',
-      limit: 1,
-      sortBy: 'most-recent',
-      resolution: 'low_resolution',
-      template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
-    });
-    feed.run();
-  </script>
-
-  <!-- TikTok & Pinterest embed scripts -->
-  <script async src="https://www.tiktok.com/embed.js"></script>
-  <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+  <footer>
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/luxelabcollective/" target="_blank" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M7 2C4.2386 2 2 4.2386 2 7V17C2 19.7614 4.2386 22 7 22H17C19.7614 22 22 19.7614 22 17V7C22 4.2386 19.7614 2 17 2H7ZM12 7.5C14.4853 7.5 16.5 9.5147 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5C9.5147 16.5 7.5 14.4853 7.5 12C7.5 9.5147 9.5147 7.5 12 7.5ZM18.25 6.5C17.8358 6.5 17.5 6.1642 17.5 5.75C17.5 5.3358 17.8358 5 18.25 5C18.6642 5 19 5.3358 19 5.75C19 6.1642 18.6642 6.5 18.25 6.5Z"/></svg>
+    </a>
+    <!-- TikTok -->
+    <a href="https://www.tiktok.com/@luxelabcollective" target="_blank" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M12 2V14.4C12 16.2823 10.5523 17.73 8.67 17.73C6.7877 17.73 5.34 16.2823 5.34 14.4C5.34 12.5177 6.7877 11.07 8.67 11.07C9.0502 11.07 9.4162 11.1078 9.765 11.1808V9.08001C9.565 9.04201 9.362 9.02001 9.156 9.02001C6.646 9.02001 4.58 11.086 4.58 13.596C4.58 16.106 6.646 18.172 9.156 18.172C11.666 18.172 13.732 16.106 13.732 13.596V4H16V2H12Z"/></svg>
+    </a>
+    <!-- Pinterest -->
+    <a href="https://au.pinterest.com/luxelabcollective/" target="_blank" aria-label="Pinterest">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12C2 16.407 4.944 20.142 8.971 21.431C9.012 21.168 9.023 20.864 8.963 20.555C8.838 20.011 8.267 16.77 8.267 16.77C7.695 15.378 7.02 14.772 7.02 14.772C6.095 13.907 7.176 13.919 7.176 13.919C8.292 13.99 8.86 15.07 8.86 15.07C9.838 16.835 11.44 16.312 12.081 16.022C12.124 15.343 12.346 14.862 12.597 14.554C10.002 14.268 7.49 13.344 7.49 9.598C7.49 8.509 7.853 7.605 8.503 6.88C8.448 6.586 8.143 5.385 8.546 4.066C8.546 4.066 9.339 3.781 11.979 5.28C12.905 5.03 13.89 4.907 14.876 4.903C15.863 4.907 16.85 5.034 17.78 5.289C20.417 3.781 21.207 4.066 21.207 4.066C21.612 5.385 21.306 6.586 21.252 6.88C21.904 7.605 22.264 8.509 22.264 9.598C22.264 13.358 19.748 14.264 17.147 14.546C17.495 14.867 17.801 15.514 17.801 16.526C17.801 18.052 17.78 19.361 17.78 20.555C17.72 20.868 17.732 21.171 17.774 21.433C21.804 20.141 24.75 16.405 24.75 12C24.75 6.486 20.514 2 15.026 2H12Z"/></svg>
+    </a>
+  </footer>
 </body>
 </html>
