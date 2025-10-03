@@ -1,465 +1,454 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Aggro Shop — Floral Edition</title>
-<style>
-  :root{
-    --bg-dark:#07060a;
-    --panel:#0f0e14;
-    --accent:#ff6b6b;
-    --muted:#bdb7c8;
-    --glass: rgba(255,255,255,0.04);
-    --glass-2: rgba(255,255,255,0.02);
-    --max-width:1200px;
-    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flower Collective</title>
 
-  html,body{height:100%;margin:0;background:var(--bg-dark);color:#eee}
-  .wrap{min-height:100vh;display:flex;align-items:stretch;justify-content:center;padding:48px 20px;box-sizing:border-box}
-  .container{width:100%;max-width:var(--max-width);display:grid;grid-template-columns:320px 1fr;gap:28px;align-items:start}
+  <!-- Styles -->
+  <style>
+    :root{
+      --accent:#e6a0c7;
+      --accent-2:#d14b8b;
+      --muted:rgba(255,255,255,0.85);
+      --glass:rgba(0,0,0,0.45);
+      --blur:10px;
+      --max-width:1100px;
+      --radius:12px;
+      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    }
 
-  /* Side panel */
-  .side{
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border:1px solid rgba(255,255,255,0.04);
-    padding:20px;border-radius:12px;backdrop-filter: blur(6px);position:relative;overflow:hidden;
-  }
-  .logo{
-    display:flex;align-items:center;gap:12px;cursor:pointer;
-  }
-  .logo img{width:64px;height:64px;object-fit:contain;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
-  .brand{font-weight:700;font-size:18px;line-height:1;color:#fff}
-  .tagline{color:var(--muted);font-size:13px;margin-top:6px}
-  .side p.short{margin:16px 0 12px;color:var(--muted);font-size:13px;line-height:1.45}
-  .filters{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-  .tags{display:flex;flex-wrap:wrap;gap:8px}
-  .tag{padding:8px 10px;background:var(--glass);border-radius:8px;color:var(--muted);font-size:13px;border:1px solid rgba(255,255,255,0.03);cursor:pointer;user-select:none}
-  .tag.active{background:linear-gradient(90deg, rgba(255,107,107,0.12), rgba(255,255,255,0.02));color:var(--accent);border-color:rgba(255,107,107,0.18)}
-  .search{margin-top:12px;display:flex;gap:8px}
-  .search input{flex:1;padding:10px 12px;border-radius:8px;background:var(--glass-2);border:1px solid rgba(255,255,255,0.03);color:#fff}
-  .search button{padding:10px 12px;border-radius:8px;background:var(--accent);color:#111;border:none;cursor:pointer;font-weight:600}
-  .cart-mini{position:absolute;right:16px;top:16px;background:rgba(0,0,0,0.4);padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);display:flex;gap:10px;align-items:center}
-  .cart-mini strong{color:#fff}
+    html,body{
+      height:100%;
+      margin:0;
+      color:var(--muted);
+      background:#000;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
 
-  /* Main area */
-  .main{
-    background:linear-gradient(180deg, rgba(16,15,19,0.5), rgba(8,7,10,0.6));
-    border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;
-    min-height:60vh;
-  }
-  .bg-video{
-    position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.08;object-fit:cover;width:100%;height:100%;filter:grayscale(10%) contrast(90%);
-  }
-  .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2}
-  .headline{font-size:28px;font-weight:800;letter-spacing:-0.02em}
-  .subtle{color:var(--muted);font-size:14px}
-  .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:18px;position:relative;z-index:2}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:10px;min-height:220px}
-  .thumb{height:120px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#1b1a1f,#111012);display:flex;align-items:center;justify-content:center}
-  .thumb img{max-width:100%;max-height:100%;object-fit:cover}
-  .title{font-weight:700}
-  .desc{color:var(--muted);font-size:13px;flex:1}
-  .price-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .price{font-weight:800;color:var(--accent)}
-  .btn{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(180deg,var(--accent),#ff4b4b);color:#111;cursor:pointer;font-weight:700}
-  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
-  .tagline-pill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:var(--muted)}
+    /* full-screen background video */
+    #bg-video{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:0;
+      filter:brightness(0.6) saturate(1.05);
+    }
 
-  /* Cart modal */
-  .cart-overlay{position:fixed;inset:0;background:linear-gradient(180deg,rgba(3,3,6,0.6),rgba(3,3,6,0.85));display:flex;align-items:center;justify-content:center;padding:30px;z-index:40;visibility:hidden;opacity:0;transition:all .18s ease}
-  .cart-overlay.open{visibility:visible;opacity:1}
-  .cart-panel{width:100%;max-width:720px;background:#0b0a0d;border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
-  .cart-items{display:flex;flex-direction:column;gap:12px;max-height:320px;overflow:auto;padding-right:6px;margin-top:10px}
-  .cart-item{display:flex;gap:12px;align-items:center}
-  .cart-item img{width:56px;height:56px;border-radius:8px;object-fit:cover}
-  .cart-item .meta{flex:1}
-  .cart-actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-  .checkout{background:linear-gradient(90deg,var(--accent),#ff4b4b);color:#111;padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer}
+    /* subtle overlay gradient to match luxe lab palette */
+    .video-tint{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(180deg, rgba(16,12,20,0.25), rgba(8,6,10,0.6));
+      z-index:1;
+      pointer-events:none;
+    }
 
-  /* small screens */
-  @media (max-width:880px){
-    .container{grid-template-columns:1fr;gap:16px}
-    .side{order:2}
-    .main{order:1}
-  }
+    /* page container */
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 24px;
+      box-sizing:border-box;
+    }
 
-  /* subtle animations */
-  .logo:hover{transform:translateY(-3px);transition:transform .12s ease}
-  .card{transition:transform .14s ease, box-shadow .14s ease}
-  .card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,0,0,0.6)}
-</style>
+    .card{
+      width:100%;
+      max-width:900px;
+      display:flex;
+      gap:32px;
+      align-items:center;
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow:0 10px 40px rgba(2,2,2,0.6);
+      backdrop-filter: blur(var(--blur));
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    /* left column with branding */
+    .brand{
+      flex:1 1 360px;
+      min-width:260px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .logo{
+      width:110px;
+      height:110px;
+      object-fit:contain;
+      border-radius:16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(0,0,0,0.25);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+      padding:10px;
+    }
+
+    h1{
+      margin:0;
+      font-size:28px;
+      line-height:1.02;
+      color:#fff;
+      letter-spacing:-0.02em;
+    }
+
+    p.lead{
+      margin:0;
+      color:var(--muted);
+      opacity:0.95;
+      max-width:36ch;
+    }
+
+    /* right column with shop form and items */
+    .shop{
+      width:420px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:stretch;
+    }
+
+    .items{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .item{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.03));
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    .item .meta{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .item .title{
+      font-weight:600;
+      color:#fff;
+    }
+
+    .item .price{
+      font-size:13px;
+      color:var(--accent);
+    }
+
+    .qty{
+      width:72px;
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+
+    .qty input[type="number"]{
+      width:46px;
+      padding:6px 8px;
+      border-radius:8px;
+      border:none;
+      background:rgba(255,255,255,0.03);
+      color:var(--muted);
+      text-align:center;
+    }
+
+    form#cart-form{
+      margin-top:6px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    input[type="email"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:rgba(255,255,255,0.02);
+      color:var(--muted);
+      outline:none;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      letter-spacing:0.01em;
+    }
+
+    .btn-paypal{
+      background:linear-gradient(180deg, #0070ba, #005ea6);
+      color:#fff;
+      box-shadow:0 6px 18px rgba(0,0,0,0.45);
+    }
+
+    .btn-cart{
+      background:linear-gradient(180deg, var(--accent), var(--accent-2));
+      color:#111;
+    }
+
+    .note{
+      font-size:13px;
+      color:rgba(255,255,255,0.7);
+      margin-top:6px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:28px;
+      background:rgba(0,0,0,0.7);
+      color:#fff;
+      padding:10px 16px;
+      border-radius:10px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.5);
+      display:none;
+      z-index:6;
+    }
+
+    /* responsive */
+    @media (max-width:920px){
+      .card{flex-direction:column;align-items:stretch;}
+      .shop{width:100%;}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="container">
+  <!-- Background video -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="flower.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div class="video-tint"></div>
 
-    <!-- Side panel -->
-    <aside class="side" id="sidePanel">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="logo" id="logoBtn" title="Toggle cinematic background and panel">
-          <img src="flower.png" alt="logo" id="logoImg" />
-          <div>
-            <div class="brand">Aggro Shop</div>
-            <div class="tagline">Bold, gritty merch & cinematic vibes</div>
+  <!-- Main content -->
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Shop">
+      <div class="brand">
+        <img src="flower.png" alt="Flower logo" class="logo" />
+        <h1>Flower Collective</h1>
+        <p class="lead">Cinematic, curated pieces inspired by natural textures and luxe palettes. Quick local dispatch and secure PayPal checkout.</p>
+        <p class="note">Colours, spacing, and type follow a soft luxe palette similar to the shop you referenced for a moody, cinematic look.</p>
+      </div>
+
+      <div class="shop" aria-live="polite">
+        <!-- Items list -->
+        <div class="items" id="items">
+          <!-- Example item. Duplicate and edit to add more products -->
+          <div class="item" data-id="sku-flower-01" data-title="Petal Necklace" data-price="59.00">
+            <div class="meta">
+              <div class="title">Petal Necklace</div>
+              <div class="price">$59.00 AUD</div>
+            </div>
+            <div class="qty" aria-hidden="true">
+              <label style="display:none">Qty</label>
+              <input type="number" value="1" min="1" class="item-qty" />
+            </div>
+          </div>
+
+          <div class="item" data-id="sku-flower-02" data-title="Pressed Flower Pin" data-price="25.00">
+            <div class="meta">
+              <div class="title">Pressed Flower Pin</div>
+              <div class="price">$25.00 AUD</div>
+            </div>
+            <div class="qty" aria-hidden="true">
+              <input type="number" value="1" min="1" class="item-qty" />
+            </div>
           </div>
         </div>
 
-        <div class="cart-mini" id="cartMini" title="Open cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.9"><path d="M3 3h2l.4 2M7 13h10l3-8H6.4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div><strong id="cartCount">0</strong> items</div>
-        </div>
-      </div>
-
-      <p class="short">Welcome. This is a compact storefront layout designed for cinematic branding. Click the logo to toggle the background video and side styles, or use the filters below to narrow products.</p>
-
-      <div class="filters" aria-hidden="false">
-        <div style="font-weight:700;font-size:13px;color:#fff">Filter by tag</div>
-        <div class="tags" id="tagList">
-          <!-- tags inserted by JS -->
-        </div>
-
-        <div class="search" style="margin-top:10px">
-          <input id="searchInput" placeholder="Search products by name or description" />
-          <button id="clearBtn" class="btn secondary">Clear</button>
-        </div>
-      </div>
-
-      <div style="margin-top:16px">
-        <div style="font-weight:700;color:#fff;font-size:13px">Quick add product (dev)</div>
-        <form id="quickForm" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-          <input name="name" placeholder="Name" required style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
-          <input name="price" placeholder="Price (AUD)" required style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
-          <input name="tags" placeholder="Tags (comma separated)" style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff" />
-          <button class="btn" type="submit">Add product</button>
+        <!-- Checkout form -->
+        <form id="cart-form" novalidate>
+          <input type="email" id="buyer-email" name="buyerEmail" placeholder="Your email address" required aria-label="Your email" />
+          <div class="actions">
+            <button type="button" id="add-to-cart" class="btn btn-cart">Prepare Order</button>
+            <a id="paypal-link" class="btn btn-paypal" href="#" target="_blank" rel="noopener">Pay with PayPal</a>
+          </div>
         </form>
-      </div>
-    </aside>
 
-    <!-- Main area -->
-    <main class="main">
-      <!-- background video -->
-      <video id="bgVideo" class="bg-video" muted loop playsinline>
-        <source src="flower.mp4" type="video/mp4">
-      </video>
-
-      <div class="header-row">
-        <div>
-          <div class="headline">Merch, prints & more</div>
-          <div class="subtle">Curated merch built for dramatic presentation. Filter by tag or search to narrow results.</div>
-        </div>
-
-        <div style="display:flex;gap:10px;align-items:center">
-          <div class="tagline-pill" id="activeFilter">Showing: all</div>
-          <button class="btn secondary" id="viewAllBtn">Reset</button>
-        </div>
-      </div>
-
-      <section class="products" id="productsGrid" aria-live="polite">
-        <!-- product cards inserted by JS -->
-      </section>
-    </main>
-
-  </div>
-</div>
-
-<!-- Cart overlay -->
-<div class="cart-overlay" id="cartOverlay" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="cart-panel">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-weight:800;font-size:16px">Your cart</div>
-      <button id="closeCart" class="btn secondary">Close</button>
-    </div>
-
-    <div class="cart-items" id="cartItems"></div>
-
-    <div class="cart-actions">
-      <div style="color:var(--muted)">Total: <strong id="cartTotal">AUD 0.00</strong></div>
-      <div style="display:flex;gap:10px">
-        <button class="btn secondary" id="clearCart">Clear</button>
-        <button class="checkout" id="checkoutBtn">Checkout</button>
+        <p class="note" id="order-note">Prepare your order then press Pay with PayPal to complete payment. After payment you will receive an email and I will be notified of the purchase.</p>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-/* --- Sample initial product data --- */
-const PRODUCTS = [
-  { id: 'p1', name: 'Ash Rose Tee', price: 39.00, tags: ['apparel','tee','floral'], img: 'https://picsum.photos/seed/ash/640/480', desc: 'Soft cotton tee with distressed floral logo.' },
-  { id: 'p2', name: 'Petal Patch Cap', price: 29.00, tags: ['apparel','cap','accessory'], img: 'https://picsum.photos/seed/cap/640/480', desc: 'One-size cap, reinforced stitch, embroidered logo.' },
-  { id: 'p3', name: 'Floral Sticker Pack', price: 9.00, tags: ['sticker','accessory'], img: 'https://picsum.photos/seed/sticker/640/480', desc: 'Set of 6 weatherproof stickers.' },
-  { id: 'p4', name: 'Limited Print 1', price: 85.00, tags: ['print','art','limited'], img: 'https://picsum.photos/seed/print/640/480', desc: 'Signed, numbered print with distressed finish.' },
-  { id: 'p5', name: 'Patchwork Hoodie', price: 99.00, tags: ['apparel','hoodie'], img: 'https://picsum.photos/seed/hoodie/640/480', desc: 'Heavyweight hoodie with raw hem details.' }
-];
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-/* Application state */
-let state = {
-  products: JSON.parse(JSON.stringify(PRODUCTS)),
-  activeTags: new Set(),
-  query: '',
-  cart: {} // id => {product, qty}
-};
+  <!-- Scripts -->
+  <script>
+    /*
+      Client side shop flow
+      - Prepares an order summary from visible items and quantities
+      - Opens PayPal.me in a new tab with the total amount
+      - Sends an order email to Jakecob.withers@icloud.com using EmailJS
+      - Replace the EMAILJS placeholders with your EmailJS user/service/template ids
+      - Replace PAYPAL_ME_USERNAME with your PayPal.me username
+    */
 
-/* DOM refs */
-const tagList = document.getElementById('tagList');
-const productsGrid = document.getElementById('productsGrid');
-const searchInput = document.getElementById('searchInput');
-const clearBtn = document.getElementById('clearBtn');
-const cartMini = document.getElementById('cartMini');
-const cartOverlay = document.getElementById('cartOverlay');
-const cartItemsEl = document.getElementById('cartItems');
-const cartTotalEl = document.getElementById('cartTotal');
-const cartCountEl = document.getElementById('cartCount');
-const checkoutBtn = document.getElementById('checkoutBtn');
-const closeCart = document.getElementById('closeCart');
-const clearCart = document.getElementById('clearCart');
-const activeFilter = document.getElementById('activeFilter');
-const viewAllBtn = document.getElementById('viewAllBtn');
-const logoBtn = document.getElementById('logoBtn');
-const bgVideo = document.getElementById('bgVideo');
-const quickForm = document.getElementById('quickForm');
+    // Configuration - edit these values
+    const RECEIVER_EMAIL = "Jakecob.withers@icloud.com";
+    const PAYPAL_ME_USERNAME = "YOUR_PAYPAL_ME_USERNAME"; // replace with your PayPal.me id, e.g. 'jake-withers'
+    const CURRENCY = "AUD";
 
-/* Helper utilities */
-function formatPrice(v){ return 'AUD ' + v.toFixed(2); }
-function uniqTags(products){
-  const s = new Set();
-  products.forEach(p => (p.tags || []).forEach(t => s.add(t)));
-  return Array.from(s).sort();
-}
+    // EmailJS configuration placeholders
+    const EMAILJS_USER = "YOUR_EMAILJS_USER_ID";
+    const EMAILJS_SERVICE = "YOUR_EMAILJS_SERVICE_ID";
+    const EMAILJS_TEMPLATE = "YOUR_EMAILJS_TEMPLATE_ID";
 
-/* Rendering */
-function renderTags(){
-  tagList.innerHTML = '';
-  const tags = uniqTags(state.products);
-  if(tags.length===0) { tagList.innerHTML = '<div style="color:var(--muted)">No tags</div>'; return; }
-  tags.forEach(t => {
-    const el = document.createElement('div');
-    el.className = 'tag' + (state.activeTags.has(t) ? ' active' : '');
-    el.textContent = t;
-    el.onclick = ()=> {
-      if(state.activeTags.has(t)) state.activeTags.delete(t); else state.activeTags.add(t);
-      render();
-    };
-    tagList.appendChild(el);
-  });
-}
+    // Toast utility
+    const toast = document.getElementById('toast');
+    function showToast(msg, timeout = 4000){
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> toast.style.display = 'none', timeout);
+    }
 
-function productMatches(p){
-  // tag filter
-  if(state.activeTags.size>0){
-    const has = [...state.activeTags].every(t => p.tags.includes(t));
-    if(!has) return false;
-  }
-  // search query
-  if(state.query){
-    const q = state.query.toLowerCase();
-    if(!(p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))) return false;
-  }
-  return true;
-}
+    // Build order summary from DOM items
+    function buildOrder(){
+      const items = Array.from(document.querySelectorAll('.item'));
+      const order = [];
+      let total = 0;
+      items.forEach(node=>{
+        const id = node.dataset.id;
+        const title = node.dataset.title;
+        const price = parseFloat(node.dataset.price);
+        const qtyEl = node.querySelector('.item-qty');
+        const qty = qtyEl ? Math.max(1, parseInt(qtyEl.value||1,10)) : 1;
+        const lineTotal = Math.round((price * qty + Number.EPSILON) * 100) / 100;
+        if(qty > 0){
+          order.push({id,title,price:price.toFixed(2),qty,lineTotal:lineTotal.toFixed(2)});
+          total += lineTotal;
+        }
+      });
+      total = Math.round((total + Number.EPSILON) * 100) / 100;
+      return {order,total:total.toFixed(2),currency:CURRENCY};
+    }
 
-function renderProducts(){
-  productsGrid.innerHTML = '';
-  const visible = state.products.filter(productMatches);
-  if(visible.length === 0){
-    productsGrid.innerHTML = '<div style="color:var(--muted);padding:20px">No products found. Try clearing filters.</div>';
-    activeFilter.textContent = 'Showing: none';
-    return;
-  }
-  activeFilter.textContent = 'Showing: ' + visible.length;
-  visible.forEach(p => {
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="thumb"><img src="${p.img}" alt="${p.name}"></div>
-      <div class="title">${p.name}</div>
-      <div class="desc">${p.desc}</div>
-      <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
-        <div style="display:flex;gap:8px;align-items:center"><div class="tagline-pill">${(p.tags||[]).join(', ')}</div></div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <div class="price">${formatPrice(p.price)}</div>
-          <button class="btn" data-id="${p.id}">Buy</button>
-        </div>
-      </div>
-    `;
-    productsGrid.appendChild(card);
-  });
+    // Update PayPal link to open PayPal.me with the correct amount
+    function updatePayPalLink(amount){
+      // PayPal.me URL takes amount in the path: https://paypal.me/username/12.34
+      const href = `https://paypal.me/${encodeURIComponent(PAYPAL_ME_USERNAME)}/${encodeURIComponent(amount)}`;
+      const link = document.getElementById('paypal-link');
+      link.href = href;
+    }
 
-  // attach buy handlers
-  productsGrid.querySelectorAll('.btn[data-id]').forEach(b => {
-    b.addEventListener('click', (e)=> {
-      const id = e.currentTarget.dataset.id;
-      addToCart(id,1);
+    // Send order via EmailJS
+    function sendOrderEmail(orderSummary, buyerEmail){
+      // EmailJS is used purely client-side here. To use:
+      // 1. Sign up at https://www.emailjs.com
+      // 2. Create service and template, then copy user id, service id, template id below.
+      // 3. Template should accept variables used in 'templateParams'
+      if(!window.emailjs){
+        showToast('Email service not configured. Add EmailJS script and IDs.');
+        return Promise.reject('emailjs-missing');
+      }
+
+      const templateParams = {
+        to_email: RECEIVER_EMAIL,
+        buyer_email: buyerEmail,
+        order_json: JSON.stringify(orderSummary.order, null, 2),
+        order_total: orderSummary.total,
+        currency: orderSummary.currency,
+        shop_name: "Flower Collective"
+      };
+
+      return emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, templateParams)
+        .then(function(response) {
+          showToast('Order email sent to shop owner.');
+          return response;
+        }, function(error) {
+          showToast('Failed to send order email.');
+          console.error('EmailJS error', error);
+          throw error;
+        });
+    }
+
+    // Attach handlers
+    document.getElementById('add-to-cart').addEventListener('click', function(){
+      const buyerEmail = document.getElementById('buyer-email').value.trim();
+      if(!buyerEmail || !/^\S+@\S+\.\S+$/.test(buyerEmail)){
+        showToast('Please enter a valid email address.');
+        return;
+      }
+
+      const summary = buildOrder();
+      if(summary.order.length === 0){
+        showToast('No items selected.');
+        return;
+      }
+
+      // Update PayPal link to reflect amount
+      updatePayPalLink(summary.total);
+
+      // Send email to shop owner with order details
+      // Attempt to send via EmailJS; if not configured, fall back to opening mailto for manual copy
+      if(EMAILJS_USER && EMAILJS_SERVICE && EMAILJS_TEMPLATE){
+        // initialize EmailJS if not already
+        if(window.emailjs && !emailjs._inited){
+          emailjs.init(EMAILJS_USER);
+          emailjs._inited = true;
+        }
+
+        sendOrderEmail(summary, buyerEmail).catch(()=>{
+          // fallback mailto link in case email service fails
+          const subject = encodeURIComponent(`New order from ${buyerEmail} - $${summary.total} ${summary.currency}`);
+          const body = encodeURIComponent(`Order total: $${summary.total} ${summary.currency}\n\nItems:\n${summary.order.map(i=>`${i.qty} × ${i.title} — $${i.lineTotal}`).join('\n')}\n\nBuyers email: ${buyerEmail}`);
+          window.location.href = `mailto:${RECEIVER_EMAIL}?subject=${subject}&body=${body}`;
+        });
+      } else {
+        // If EmailJS not configured, open user's mail client with prefilled content to notify you
+        const subject = encodeURIComponent(`New order from ${buyerEmail} - $${summary.total} ${summary.currency}`);
+        const body = encodeURIComponent(`Order total: $${summary.total} ${summary.currency}\n\nItems:\n${summary.order.map(i=>`${i.qty} × ${i.title} — $${i.lineTotal}`).join('\n')}\n\nBuyers email: ${buyerEmail}`);
+        window.location.href = `mailto:${RECEIVER_EMAIL}?subject=${subject}&body=${body}`;
+        showToast('Opened mail client to notify owner. Configure EmailJS for automatic emails.');
+      }
+
+      showToast('Order prepared. Click Pay with PayPal to complete payment.');
     });
-  });
-}
 
-function renderCart(){
-  cartItemsEl.innerHTML = '';
-  const entries = Object.values(state.cart);
-  if(entries.length === 0){
-    cartItemsEl.innerHTML = '<div style="color:var(--muted)">Your cart is empty.</div>';
-    cartTotalEl.textContent = formatPrice(0);
-    cartCountEl.textContent = '0';
-    return;
-  }
-  let total = 0;
-  let count = 0;
-  entries.forEach(entry => {
-    const li = document.createElement('div');
-    li.className = 'cart-item';
-    li.innerHTML = `
-      <img src="${entry.product.img}" alt="${entry.product.name}" />
-      <div class="meta">
-        <div style="font-weight:700">${entry.product.name}</div>
-        <div style="color:var(--muted);font-size:13px">${formatPrice(entry.product.price)} × ${entry.qty}</div>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn secondary" data-action="dec" data-id="${entry.product.id}">-</button>
-        <div style="min-width:28px;text-align:center">${entry.qty}</div>
-        <button class="btn" data-action="inc" data-id="${entry.product.id}">+</button>
-      </div>
-    `;
-    cartItemsEl.appendChild(li);
-    total += entry.product.price * entry.qty;
-    count += entry.qty;
-  });
-  cartTotalEl.textContent = formatPrice(total);
-  cartCountEl.textContent = String(count);
+    // Initialize UI with default PayPal link
+    updatePayPalLink('0.00');
 
-  // handlers
-  cartItemsEl.querySelectorAll('button[data-action]').forEach(btn=>{
-    btn.addEventListener('click', e => {
-      const id = e.currentTarget.dataset.id;
-      const action = e.currentTarget.dataset.action;
-      if(action==='inc') addToCart(id,1);
-      if(action==='dec') removeFromCart(id,1);
-      renderCart();
-    });
-  });
-}
-
-/* Cart actions */
-function addToCart(id, qty=1){
-  const product = state.products.find(p => p.id === id);
-  if(!product) return;
-  if(!state.cart[id]) state.cart[id] = {product: product, qty: 0};
-  state.cart[id].qty += qty;
-  if(state.cart[id].qty < 1) delete state.cart[id];
-  renderCart();
-  // show overlay briefly
-  cartOverlay.classList.add('open');
-  cartOverlay.setAttribute('aria-hidden','false');
-}
-
-function removeFromCart(id, qty=1){
-  if(!state.cart[id]) return;
-  state.cart[id].qty -= qty;
-  if(state.cart[id].qty <= 0) delete state.cart[id];
-}
-
-/* UI events */
-searchInput.addEventListener('input', e => {
-  state.query = e.target.value.trim();
-  render();
-});
-clearBtn.addEventListener('click', e => {
-  state.query = '';
-  searchInput.value = '';
-  state.activeTags.clear();
-  render();
-});
-viewAllBtn.addEventListener('click', ()=> {
-  state.query = '';
-  searchInput.value = '';
-  state.activeTags.clear();
-  render();
-});
-
-cartMini.addEventListener('click', ()=> {
-  cartOverlay.classList.add('open');
-  cartOverlay.setAttribute('aria-hidden','false');
-  renderCart();
-});
-closeCart.addEventListener('click', ()=> {
-  cartOverlay.classList.remove('open');
-  cartOverlay.setAttribute('aria-hidden','true');
-});
-clearCart.addEventListener('click', ()=> {
-  state.cart = {};
-  renderCart();
-});
-
-checkoutBtn.addEventListener('click', ()=> {
-  // mock checkout behaviour
-  if(Object.keys(state.cart).length === 0){
-    alert('Cart is empty.');
-    return;
-  }
-  // in real site you'd integrate Stripe/Shop backend here
-  alert('Checkout simulated. Replace with real payment integration.');
-  state.cart = {};
-  renderCart();
-  cartOverlay.classList.remove('open');
-  cartOverlay.setAttribute('aria-hidden','true');
-});
-
-/* Toggle cinematic background and side style via logo */
-let bgPlaying = false;
-logoBtn.addEventListener('click', ()=> {
-  bgPlaying = !bgPlaying;
-  if(bgPlaying){
-    bgVideo.play().catch(()=>{}); // attempt play
-    document.getElementById('sidePanel').style.transform = 'translateX(0)';
-    document.getElementById('sidePanel').style.boxShadow = '0 18px 48px rgba(0,0,0,0.6)';
-  } else {
-    bgVideo.pause();
-    document.getElementById('sidePanel').style.boxShadow = 'none';
-  }
-});
-
-/* Quick-add dev form to add products on the fly */
-quickForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const fd = new FormData(quickForm);
-  const name = fd.get('name').trim();
-  const price = parseFloat(fd.get('price')) || 0;
-  const tags = fd.get('tags').split(',').map(s=>s.trim()).filter(Boolean);
-  const newP = {
-    id: 'p' + Date.now(),
-    name, price, tags, img: 'https://picsum.photos/seed/' + encodeURIComponent(name) + '/640/480',
-    desc: 'New item added from quick form.'
-  };
-  state.products.unshift(newP);
-  quickForm.reset();
-  render();
-});
-
-/* Initial render */
-function render(){
-  renderTags();
-  renderProducts();
-  renderCart();
-}
-render();
-
-/* Accessibility: close cart on overlay click */
-cartOverlay.addEventListener('click', e => {
-  if(e.target === cartOverlay){
-    cartOverlay.classList.remove('open');
-    cartOverlay.setAttribute('aria-hidden','true');
-  }
-});
-
-/* Small enhancement: keyboard shortcuts */
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'k' && (e.ctrlKey || e.metaKey)){
-    e.preventDefault();
-    searchInput.focus();
-  }
-});
-</script>
+    // Optional: load EmailJS script if you intend to use it
+    (function loadEmailJSScript(){
+      if(!EMAILJS_USER || !EMAILJS_SERVICE || !EMAILJS_TEMPLATE) return;
+      if(window.emailjs) return;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.emailjs.com/dist/email.min.js';
+      s.onload = function(){
+        if(window.emailjs && EMAILJS_USER) {
+          emailjs.init(EMAILJS_USER);
+          emailjs._inited = true;
+        }
+      };
+      s.onerror = function(){ console.warn('EmailJS script failed to load'); };
+      document.head.appendChild(s);
+    })();
+  </script>
 </body>
 </html>
