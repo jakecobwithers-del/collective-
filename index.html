@@ -4,10 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Luxe Lab Collective</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet"/>
   <style>
     /* RESET & BASE */
     * { box-sizing: border-box; margin:0; padding:0; }
@@ -15,163 +12,165 @@
     body {
       font-family:'Inter',sans-serif;
       color:#333;
-      background: url('pedals.png') repeat;
-      background-size: 400px 400px;
-      background-attachment: fixed;
-      line-height:1.5;
       overflow-x:hidden;
-      padding-bottom: 60px; /* for footer */
+      background:#ffe4f8;
     }
 
-    /* BUBBLE UTILS */
+    /* FALLING PETALS */
+    .petal-container, #side-left, #side-right {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%; pointer-events:none; overflow:hidden;
+      z-index:0;
+    }
+    #side-left, #side-right {
+      position:fixed; width:60px; height:100vh; display:none;
+      z-index:0; background:none;
+    }
+    #side-left { left:0; }
+    #side-right { right:0; }
+    .petal {
+      position:absolute; width:40px; height:40px;
+      background:url('pedals.png') no-repeat center/cover;
+      opacity:0.8;
+      animation:
+        fall var(--fall-dur) linear infinite,
+        sway var(--sway-dur) ease-in-out infinite;
+    }
+    @keyframes fall { to { transform:translateY(120vh); } }
+    @keyframes sway {
+      0%,100% { transform:translateX(0) rotate(0deg); }
+      50%     { transform:translateX(20px) rotate(180deg); }
+    }
+
+    /* BUBBLE LAYOUT */
     .bubble {
-      background: rgba(255,255,255,0.9);
-      border-radius: 32px;
-      padding: 32px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-      max-width: 800px;
-      margin: 40px auto;
+      position:relative; z-index:1;
+      background:rgba(255,255,255,0.95);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+      max-width:800px; margin:40px auto;
     }
 
     /* HERO */
-    #hero {
-      text-align: center;
-      padding: 80px 20px;
-    }
-    #hero .bubble {
-      padding-bottom: 48px;
-    }
-    #hero .logo {
-      width: 350px;
-      max-width: 80%;
-      margin-bottom: 24px;
-    }
-    #hero h1 {
-      font-size: 3rem;
-      color: #c83b7a;
-      margin-bottom: 16px;
-    }
-    #hero p {
-      font-size: 1.1rem;
-      margin-bottom: 24px;
-    }
+    #hero { text-align:center; padding:80px 20px; }
+    #hero .logo { width:300px; max-width:80%; margin-bottom:24px; }
+    #hero h1 { font-size:2.75rem; color:#c83b7a; margin-bottom:16px; }
+    #hero p { font-size:1.1rem; margin-bottom:24px; }
     #hero .cta {
-      display:inline-block;
-      padding:14px 32px;
-      background:#c83b7a;
-      color:#fff;
-      border-radius:8px;
-      font-weight:700;
-      transition:background .2s;
+      display:inline-block; padding:12px 28px;
+      background:#c83b7a; color:#fff; border-radius:8px;
+      font-weight:700; transition:background .2s;
     }
     #hero .cta:hover { background:#a22e60; }
 
-    /* ABOUT TEXT */
-    #about .bubble h2 {
-      font-size:2rem;
-      color:#c83b7a;
-      margin-bottom:16px;
-      text-align:center;
-    }
-    #about .bubble p {
-      margin-bottom:12px;
-      font-size: 1rem;
-    }
-    #about .bubble strong {
-      display:block;
-      margin-bottom:16px;
-      font-size:1.1rem;
-    }
-
-    /* INSTAGRAM VIDEO */
+    /* INSTAGRAM EMBED */
+    #insta-video { text-align:center; }
     #insta-video .bubble {
-      text-align:center;
-      padding:0; box-shadow:none; background:none;
-      max-width:640px;
+      padding:0; box-shadow:none; background:none; max-width:640px;
     }
-    #insta-video iframe {
-      width:100%; max-width:640px;
-      height:360px;
-      border:none;
-      border-radius:16px;
-      overflow:hidden;
+    #insta-container iframe,
+    #insta-container video {
+      width:100%; border-radius:16px; max-width:100%;
     }
 
-    /* WHAT’S HOT SLIDESHOW */
-    #hot .bubble {
-      padding-bottom:16px;
-    }
+    /* WHAT'S HOT GRID */
     #hot h2 {
+      text-align:center; font-size:2rem; color:#c83b7a; margin-top:0;
+    }
+    #hot .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:16px;
+      margin-top:24px;
+    }
+    .hot-item {
       text-align:center;
-      font-size:2rem;
-      color:#c83b7a;
-      margin-bottom:24px;
     }
-    #hot .slideshow {
-      position:relative;
-      max-width:800px;
-      margin:0 auto;
-      overflow:hidden;
-      border-radius:16px;
+    .hot-item img {
+      width:100%; height:120px; object-fit:cover;
+      border-radius:12px; margin-bottom:8px;
     }
-    #hot .slides {
-      display:flex;
-      width:400%;
-      animation: slide 16s infinite;
-    }
-    #hot .slides img {
-      width:100%;
-      flex-shrink:0;
-      object-fit:cover;
-    }
-    @keyframes slide {
-      0%    { transform:translateX(0%); }
-      20%   { transform:translateX(0%); }
-      25%   { transform:translateX(-100%); }
-      45%   { transform:translateX(-100%); }
-      50%   { transform:translateX(-200%); }
-      70%   { transform:translateX(-200%); }
-      75%   { transform:translateX(-300%); }
-      95%   { transform:translateX(-300%); }
-      100%  { transform:translateX(0%); }
+    .hot-item p {
+      margin:0; font-size:0.9rem; color:#555;
     }
 
-    /* SOCIAL ICONS */
+    /* ABOUT */
+    #about h2 {
+      text-align:center; font-size:2rem; color:#c83b7a; margin-top:0;
+    }
+    #about p { margin-bottom:12px; font-size:1rem; line-height:1.5; }
+
+    /* FOOTER SOCIALS */
     footer {
-      position:fixed;
-      bottom:0; left:0; right:0;
-      background:rgba(255,255,255,0.9);
-      padding:12px 0;
-      display:flex;
-      justify-content:center;
-      gap:24px;
+      text-align:center; padding:16px 0;
+      background:rgba(255,255,255,0.95);
       box-shadow:0 -2px 8px rgba(0,0,0,0.05);
     }
     footer a {
-      width:32px; height:32px;
-      display:inline-flex;
-      align-items:center; justify-content:center;
-      color:#c83b7a;
-      transition:color .2s;
+      margin:0 12px; color:#c83b7a; transition:color .2s;
     }
     footer a:hover { color:#a22e60; }
     footer svg { width:24px; height:24px; fill:currentColor; }
+
+    /* ADMIN LOGIN & PANEL */
+    #admin-login, #admin-panel {
+      position:fixed; bottom:20px; left:20px;
+      background:#fff; padding:16px; border-radius:12px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+      width:280px; z-index:2;
+    }
+    #admin-login input, #admin-panel input, #admin-panel textarea {
+      width:100%; margin-bottom:8px; padding:8px;
+      border:1px solid #ccc; border-radius:6px;
+      font-size:0.9rem;
+    }
+    #admin-login button, #admin-panel button {
+      width:100%; padding:10px;
+      background:#c83b7a; color:#fff; border:none;
+      border-radius:6px; font-weight:700;
+      cursor:pointer; transition:background .2s;
+    }
+    #admin-login button:hover, #admin-panel button:hover { background:#a22e60; }
+    #admin-panel { max-height:90vh; overflow-y:auto; display:none; }
 
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
+  <!-- Falling petals -->
+  <div class="petal-container"></div>
+  <div id="side-left"></div>
+  <div id="side-right"></div>
+
+  <!-- Hero -->
   <section id="hero">
     <div class="bubble">
-      <img src="Flower.PNG" alt="Luxe Lab Collective Logo" class="logo"/>
+      <img src="Flower.PNG" alt="Logo" class="logo"/>
       <h1>Luxe Lab Collective</h1>
       <p>Hand-packed lip-glosses, scrunchies, mini hair clips & more—curated with passion.</p>
-      <a href="#about" class="cta">Learn More</a>
+      <a href="#insta-video" class="cta">Latest Instagram</a>
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- Instagram Video/Image Embed -->
+  <section id="insta-video">
+    <div class="bubble" id="insta-container">
+      <!-- JS will inject your latest post here -->
+    </div>
+  </section>
+
+  <!-- What's Hot -->
+  <section id="hot">
+    <div class="bubble">
+      <h2>What's Hot</h2>
+      <div class="grid" id="hot-container">
+        <!-- JS populates .hot-item bubbles -->
+      </div>
+    </div>
+  </section>
+
+  <!-- About Me at bottom -->
   <section id="about">
     <div class="bubble">
       <strong>Luxe Lip Glosses ~ A Flawless Finish for Every Face. 💎Hand-Packed | Affordable</strong>
@@ -181,45 +180,10 @@
       <h2>More Info</h2>
       <p>LuxeLab Collective is your destination for high-quality, hand-packed lip-glosses and other luxury lip-products made to elevate your everyday look. My goal? To help you feel confident, radiant, and unapologetically YOU.</p>
       <h2>💄 Glosses That Glow</h2>
-      <p>From ultra-glossy to subtle shimmer, our lip-glosses are lightweight, hydrating, and designed to keep your lips moist and luxurious. At LuxeLab there's something for everyone.</p>
+      <p>From ultra-glossy to subtle shimmer, our lip-glosses are lightweight, hydrating, and designed to keep your lips moist and luxurious. There's something for everyone at LuxeLab.</p>
     </div>
   </section>
 
-  <!-- INSTAGRAM VIDEO -->
-  <section id="insta-video">
-    <div class="bubble">
-      <!-- Replace the src below with your actual IG oEmbed iframe URL -->
-      <iframe src="https://www.instagram.com/p/XXXXXXXXX/embed/captioned?cr=1&amp;v=14" allowfullscreen></iframe>
-    </div>
-  </section>
-
-  <!-- WHAT’S HOT SLIDESHOW -->
-  <section id="hot">
-    <div class="bubble">
-      <h2>What's Hot</h2>
-      <div class="slideshow">
-        <div class="slides">
-          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9778.jpg?v=1758514351" alt="Rainbow Bear"/>
-          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9773.jpg?v=1758513980" alt="BeachCore"/>
-          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/4A60AADF-9A2C-44DD-B103-F6BF2828D63B.jpg?v=1758678639" alt="Heart"/>
-          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9795.jpg?v=1758639222" alt="Scrunchies"/>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SOCIAL ICONS -->
+  <!-- Social Icons Footer -->
   <footer>
-    <a href="https://www.instagram.com/luxelabcollective/" target="_blank" aria-label="Instagram">
-      <svg viewBox="0 0 24 24"><path d="M7 2C4.2386 2 2 4.2386 2 7V17C2 19.7614 4.2386 22 7 22H17C19.7614 22 22 19.7614 22 17V7C22 4.2386 19.7614 2 17 2H7ZM12 7.5C14.4853 7.5 16.5 9.5147 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5C9.5147 16.5 7.5 14.4853 7.5 12C7.5 9.5147 9.5147 7.5 12 7.5ZM18.25 6.5C17.8358 6.5 17.5 6.1642 17.5 5.75C17.5 5.3358 17.8358 5 18.25 5C18.6642 5 19 5.3358 19 5.75C19 6.1642 18.6642 6.5 18.25 6.5Z"/></svg>
-    </a>
-    <a href="https://www.tiktok.com/@luxelabcollective" target="_blank" aria-label="TikTok">
-      <svg viewBox="0 0 24 24"><path d="M12 2V14.4C12 16.2823 10.5523 17.73 8.67 17.73C6.7877 17.73 5.34 16.2823 5.34 14.4C5.34 12.5177 6.7877 11.07 8.67 11.07C9.0502 11.07 9.4162 11.1078 9.765 11.1808V9.08001C9.565 9.04201 9.362 9.02001 9.156 9.02001C6.646 9.02001 4.58 11.086 4.58 13.596C4.58 16.106 6.646 18.172 9.156 18.172C11.666 18.172 13.732 16.106 13.732 13.596V4H16V2H12Z"/></svg>
-    </a>
-    <a href="https://au.pinterest.com/luxelabcollective/" target="_blank" aria-label="Pinterest">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12C2 16.407 4.944 20.142 8.971 21.431C9.012 21.168 9.023 20.864 8.963 20.555C8.838 20.011 8.267 16.77 8.267 16.77C7.695 15.378 7.02 14.772 7.02 14.772C6.095 13.907 7.176 13.919 7.176 13.919C8.292 13.99 8.86 15.07 8.86 15.07C9.838 16.835 11.44 16.312 12.081 16.022C12.124 15.343 12.346 14.862 12.597 14.554C10.002 14.268 7.49 13.344 7.49 9.598C7.49 8.509 7.853 7.605 8.503 6.88C8.448 6.586 8.143 5.385 8.546 4.066C8.546 4.066 9.339 3.781 11.979 5.28C12.905 5.03 13.89 4.907 14.876 4.903C15.863 4.907 16.85 5.034 17.78 5.289C20.417 3.781 21.207 4.066 21.207 4.066C21.612 5.385 21.306 6.586 21.252 6.88C21.904 7.605 22.264 8.509 22.264 9.598C22.264 13.358 19.748 14.264 17.147 14.546C17.495 14.867 17.801 15.514 17.801 16.526C17.801 18.052 17.78 19.361 17.78 20.555C17.72 20.868 17.732 21.171 17.774 21.433C21.804 20.141 24.75 16.405 24.75 12C24.75 6.486 20.514 2 15.026 2H12Z"/></svg>
-    </a>
-  </footer>
-
-</body>
-</html>
+    <a href="https://instagram.com/luxelabcollective
