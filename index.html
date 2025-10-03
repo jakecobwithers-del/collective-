@@ -1,1 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flower Collective</title>
 
+  <style>
+    :root{
+      --accent:#e6a0c7;
+      --accent-2:#d14b8b;
+      --muted:#f6eef6;
+      --glass:rgba(0,0,0,0.45);
+      --radius:12px;
+      --blur:10px;
+      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    html,body{height:100%;margin:0;background:#050306;color:var(--muted);-webkit-font-smoothing:antialiased}
+    /* background video */
+    #bg-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(0.55) saturate(1.05)}
+    /* tint */
+    .video-tint{position:fixed;inset:0;background:linear-gradient(180deg, rgba(8,6,10,0.18), rgba(6,4,8,0.6));z-index:1;pointer-events:none}
+    /* page container */
+    .wrap{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:36px}
+    .card{width:100%;max-width:980px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);backdrop-filter:blur(var(--blur));padding:28px;box-shadow:0 16px 50px rgba(0,0,0,0.6);display:flex;gap:28px;align-items:center;border:1px solid rgba(255,255,255,0.03)}
+    .brand{flex:1;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+    .logo{width:112px;height:112px;object-fit:contain;border-radius:14px;padding:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));box-shadow:0 12px 30px rgba(0,0,0,0.5)}
+    h1{margin:0;font-size:28px;color:#fff;letter-spacing:-0.01em}
+    p.lead{margin:0;color:rgba(255,255,255,0.9);max-width:42ch}
+    .shop{width:420px;display:flex;flex-direction:column;gap:12px}
+    .items{display:grid;gap:10px}
+    .item{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.02));border:1px solid rgba(255,255,255,0.03)}
+    .item .meta{display:flex;flex-direction:column;gap:4px}
+    .title{font-weight:700;color:#fff}
+    .price{color:var(--accent)}
+    .qty input{width:64px;padding:6px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:var(--muted);text-align:center}
+    form#cart-form{display:flex;gap:8px;align-items:center}
+    input[type="email"]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:var(--muted);outline:none}
+    .actions{display:flex;gap:8px}
+    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-paypal{background:linear-gradient(180deg,#0070ba,#005ea6);color:#fff}
+    .btn-cart{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#111}
+    .note{font-size:13px;color:rgba(255,255,255,0.75)}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(0,0,0,0.75);color:#fff;padding:10px 14px;border-radius:10px;display:none;z-index:6}
+
+    @media (max-width:920px){
+      .card{flex-direction:column;align-items:stretch}
+      .shop{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <!-- Background video (place flower.mp4 next to index.html) -->
+  <video id="bg-video" autoplay muted loop playsinline preload="metadata" poster="flower.png">
+    <source src="flower.mp4" type="video/mp4" />
+    Your browser does not support video.
+  </video>
+  <div class="video-tint"></div>
+
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Shop">
+      <div class="brand">
+        <img class="logo" src="flower.png" alt="Flower logo" />
+        <h1>Flower Collective</h1>
+        <p class="lead">Cinematic, curated pieces inspired by natural textures and luxe palettes. Local dispatch and secure PayPal checkout.</p>
+        <p class="note">Add items and quantities, enter buyer email, press Prepare Order and then Pay with PayPal to complete payment.</p>
+      </div>
+
+      <div class="shop" aria-live="polite">
+        <div class="items" id="items">
+          <div class="item" data-id="sku-flower-01" data-title="Petal Necklace" data-price="59.00">
+            <div class="meta">
+              <div class="title">Petal Necklace</div>
+              <div class="price">$59.00 AUD</div>
+            </div>
+            <div class="qty">
+              <input class="item-qty" type="number" min="1" value="1" aria-label="Quantity for Petal Necklace" />
+            </div>
+          </div>
+
+          <div class="item" data-id="sku-flower-02" data-title="Pressed Flower Pin" data-price="25.00">
+            <div class="meta">
+              <div class="title">Pressed Flower Pin</div>
+              <div class="price">$25.00 AUD</div>
+            </div>
+            <div class="qty">
+              <input class="item-qty" type="number" min="1" value="1" aria-label="Quantity for Pressed Flower Pin" />
+            </div>
+          </div>
+        </div>
+
+        <form id="cart-form" novalidate>
+          <input id="buyer-email" type="email" name="buyerEmail" placeholder="Buyer email" required aria-label="Buyer email" />
+          <div class="actions">
+            <button type="button" id="add-to-cart" class="btn btn-cart">Prepare Order</button>
+            <a id="paypal-link" class="btn btn-paypal" href="#" target="_blank" rel="noopener">Pay with PayPal</a>
+          </div>
+        </form>
+
+        <p class="note" id="order-note">After preparing the order the PayPal button opens PayPal.me with the correct total. Order details are emailed to the shop owner.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* Configuration - edit these values in your repo */
+    const RECEIVER_EMAIL = "Jakecob.withers@icloud.com";
+    const PAYPAL_ME_USERNAME = "YOUR_PAYPAL_ME_USERNAME"; // replace e.g. 'jake-withers'
+    const CURRENCY = "AUD";
+
+    // EmailJS placeholders - optional: sign up at https://www.emailjs.com and populate these
+    const EMAILJS_USER = ""; // e.g. "user_xxx"
+    const EMAILJS_SERVICE = ""; // e.g. "service_xxx"
+    const EMAILJS_TEMPLATE = ""; // e.g. "template_xxx"
+
+    const toast = document.getElementById('toast');
+    function showToast(msg, t = 3500){
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> toast.style.display = 'none', t);
+    }
+
+    function buildOrder(){
+      const items = Array.from(document.querySelectorAll('.item'));
+      const order = [];
+      let total = 0;
+      items.forEach(node=>{
+        const id = node.dataset.id;
+        const title = node.dataset.title;
+        const price = parseFloat(node.dataset.price) || 0;
+        const qty = Math.max(1, parseInt((node.querySelector('.item-qty')||{value:1}).value||1,10));
+        const line = Math.round((price * qty + Number.EPSILON) * 100) / 100;
+        order.push({id,title,price:price.toFixed(2),qty,line:line.toFixed(2)});
+        total += line;
+      });
+      total = Math.round((total + Number.EPSILON) * 100) / 100;
+      return {order,total:total.toFixed(2),currency:CURRENCY};
+    }
+
+    function updatePayPalLink(amount){
+      const link = document.getElementById('paypal-link');
+      // If PAYPAL_ME_USERNAME not set, keep link disabled
+      if(!PAYPAL_ME_USERNAME || PAYPAL_ME_USERNAME === "YOUR_PAYPAL_ME_USERNAME"){
+        link.href = "#";
+        link.setAttribute('aria-disabled','true');
+        return;
+      }
+      const href = `https://paypal.me/${encodeURIComponent(PAYPAL_ME_USERNAME)}/${encodeURIComponent(amount)}`;
+      link.href = href;
+      link.removeAttribute('aria-disabled');
+    }
+
+    function sendOrderEmail(summary, buyerEmail){
+      // If EmailJS configured, attempt to send. Otherwise fallback to mailto which opens owner's mail client (manual).
+      if(EMAILJS_USER && EMAILJS_SERVICE && EMAILJS_TEMPLATE && window.emailjs){
+        const templateParams = {
+          to_email: RECEIVER_EMAIL,
+          buyer_email: buyerEmail,
+          order_json: JSON.stringify(summary.order, null, 2),
+          order_total: summary.total,
+          currency: summary.currency,
+          shop_name: "Flower Collective"
+        };
+        return emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, templateParams)
+          .then(()=> { showToast('Order emailed to shop owner.'); })
+          .catch(err => {
+            console.error('EmailJS send failed', err);
+            fallbackMailto(summary, buyerEmail);
+            throw err;
+          });
+      } else {
+        fallbackMailto(summary, buyerEmail);
+        return Promise.resolve();
+      }
+    }
+
+    function fallbackMailto(summary, buyerEmail){
+      const subject = encodeURIComponent(`New order from ${buyerEmail} - $${summary.total} ${summary.currency}`);
+      const body = encodeURIComponent(`Order total: $${summary.total} ${summary.currency}\n\nItems:\n${summary.order.map(i=>`${i.qty} × ${i.title} — $${i.line}`).join('\n')}\n\nBuyer's email: ${buyerEmail}`);
+      // opens default mail client for you to send manually
+      window.location.href = `mailto:${RECEIVER_EMAIL}?subject=${subject}&body=${body}`;
+      showToast('Opened mail client to notify owner. Configure EmailJS for automatic emails.');
+    }
+
+    document.getElementById('add-to-cart').addEventListener('click', function(){
+      const buyerEmail = document.getElementById('buyer-email').value.trim();
+      if(!buyerEmail || !/^\S+@\S+\.\S+$/.test(buyerEmail)){
+        showToast('Enter a valid buyer email.');
+        return;
+      }
+
+      const summary = buildOrder();
+      if(!summary.order.length){
+        showToast('No items in order.');
+        return;
+      }
+
+      updatePayPalLink(summary.total);
+
+      sendOrderEmail(summary, buyerEmail).then(()=>{
+        showToast('Order prepared. Click Pay with PayPal to complete payment.');
+      }).catch(()=> {
+        showToast('Order prepared but email failed; mail client opened.');
+      });
+    });
+
+    // Initialize PayPal link (disabled until Prepare Order)
+    updatePayPalLink('0.00');
+
+    // Load EmailJS if credentials present
+    (function loadEmailJS(){
+      if(!EMAILJS_USER || !EMAILJS_SERVICE || !EMAILJS_TEMPLATE) return;
+      if(window.emailjs) return;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.emailjs.com/dist/email.min.js';
+      s.onload = function(){ if(window.emailjs){ emailjs.init(EMAILJS_USER); emailjs._inited = true; } };
+      s.onerror = function(){ console.warn('EmailJS script failed to load'); };
+      document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
