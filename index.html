@@ -1,15 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flower Collective — Shop</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flower Collective</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #fef6f9;
       font-family: 'Inter', sans-serif;
+      background: #fff0f5;
       color: #333;
       overflow-x: hidden;
     }
@@ -43,8 +43,10 @@
       height: 100%;
     }
     #hero .logo img {
-      width: 300px;
+      width: 320px;
       height: auto;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
     }
     #shop {
       padding: 60px 20px;
@@ -61,6 +63,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: transform 0.2s ease;
+    }
+    .product:hover {
+      transform: translateY(-4px);
     }
     .product img {
       width: 100%;
