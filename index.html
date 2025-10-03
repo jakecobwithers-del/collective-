@@ -11,13 +11,28 @@
   <style>
     /* RESET & BASE */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html, body { height: 100%; overflow-x: hidden; }
     body {
       font-family: 'Inter', sans-serif;
-      color: #333;
       background: #ffe4f8;
-      overflow-x: hidden;
+      position: relative;
+      color: #333;
     }
+
+    /* FIXED CORNER BUTTONS */
+    .shop-btn, .admin-btn {
+      position: fixed;
+      background: #c83b7a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 3;
+    }
+    .shop-btn { top: 20px; left: 20px; }
+    .admin-btn { top: 20px; right: 20px; }
 
     /* FALLING PETALS */
     .petal-container, #side-left, #side-right {
@@ -47,14 +62,15 @@
       50%     { transform: translateX(20px) rotate(180deg); }
     }
 
-    /* BUBBLE LAYOUT */
+    /* BUBBLE STYLES */
     .bubble {
       position: relative; z-index: 1;
       background: rgba(255,255,255,0.95);
       border-radius: 24px;
       padding: 24px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      max-width: 800px; margin: 40px auto;
+      max-width: 800px;
+      margin: 40px auto;
     }
 
     /* HERO */
@@ -74,27 +90,26 @@
       font-size: 1.1rem; margin-bottom: 24px;
     }
     #hero .cta {
-      display: inline-block; padding: 12px 28px;
-      background: #c83b7a; color: #fff;
-      border-radius: 8px; font-weight: 700;
+      display: inline-block;
+      padding: 12px 28px;
+      background: #c83b7a;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
       transition: background 0.2s;
     }
     #hero .cta:hover { background: #a22e60; }
 
     /* INSTAGRAM EMBED */
-    #insta-video {
-      text-align: center;
-    }
     #insta-video .bubble {
-      padding: 0; box-shadow: none;
-      background: none; max-width: 640px;
+      padding: 0; box-shadow: none; background: none;
+      max-width: 640px;
     }
-    #insta-container iframe,
-    #insta-container video {
-      width: 100%; border-radius: 16px; max-width: 100%;
+    #insta-container iframe {
+      width: 100%; border-radius: 16px;
     }
 
-    /* WHAT'S HOT GRID */
+    /* WHAT'S HOT */
     #hot h2 {
       text-align: center; font-size: 2rem;
       color: #c83b7a; margin-top: 0;
@@ -105,7 +120,7 @@
       gap: 16px; margin-top: 24px;
     }
     .hot-item {
-      text-align: center; position: relative;
+      text-align: center;
     }
     .hot-item img {
       width: 100%; height: 120px;
@@ -131,6 +146,7 @@
       text-align: center; padding: 16px 0;
       background: rgba(255,255,255,0.95);
       box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+      position: relative; z-index: 1;
     }
     footer a {
       margin: 0 12px; color: #c83b7a;
@@ -140,36 +156,15 @@
     footer svg {
       width: 24px; height: 24px; fill: currentColor;
     }
-
-    /* ADMIN LOGIN & PANEL */
-    #admin-login, #admin-panel {
-      position: fixed; bottom: 20px; left: 20px;
-      background: #fff; padding: 16px;
-      border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 280px; z-index: 2;
-    }
-    #admin-panel { display: none; max-height: 90vh; overflow-y: auto; }
-    #admin-login input,
-    #admin-panel input,
-    #admin-panel textarea {
-      width: 100%; margin-bottom: 8px; padding: 8px;
-      border: 1px solid #ccc; border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    #admin-login button,
-    #admin-panel button {
-      width: 100%; padding: 10px;
-      background: #c83b7a; color: #fff; border: none;
-      border-radius: 6px; font-weight: 700;
-      cursor: pointer; transition: background 0.2s;
-    }
-    #admin-login button:hover,
-    #admin-panel button:hover { background: #a22e60; }
   </style>
 </head>
 <body>
 
-  <!-- Falling petals -->
+  <!-- Fixed Corner Buttons -->
+  <button class="shop-btn" onclick="location.href='shop.html'">Shop</button>
+  <button class="admin-btn">Admin</button>
+
+  <!-- Falling Petals -->
   <div class="petal-container"></div>
   <div id="side-left"></div>
   <div id="side-right"></div>
@@ -180,28 +175,50 @@
       <img src="Flower.PNG" alt="Logo" class="logo"/>
       <h1>Luxe Lab Collective</h1>
       <p>Hand-packed lip-glosses, scrunchies, mini hair clips & more—curated with passion.</p>
-      <a href="#insta-video" class="cta">Latest Instagram</a>
+      <a href="#insta-video" class="cta">View Instagram</a>
     </div>
   </section>
 
-  <!-- Instagram Embed -->
+  <!-- INSTAGRAM EMBED -->
   <section id="insta-video">
     <div class="bubble" id="insta-container">
-      <!-- Latest post injected here -->
+      <!-- Replace with your actual Instagram embed code -->
+      <blockquote 
+        class="instagram-media" 
+        data-instgrm-permalink="https://www.instagram.com/p/SHORTCODE/" 
+        data-instgrm-version="14" 
+        style="margin:0 auto;">
+      </blockquote>
+      <script async defer src="//www.instagram.com/embed.js"></script>
     </div>
   </section>
 
-  <!-- What's Hot -->
+  <!-- WHAT'S HOT -->
   <section id="hot">
     <div class="bubble">
       <h2>What's Hot</h2>
-      <div class="grid" id="hot-container">
-        <!-- Hot items injected here -->
+      <div class="grid">
+        <div class="hot-item">
+          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9778.jpg?v=1758514351" alt="Rainbow Bear Keychain"/>
+          <p>Rainbow Bear Keychain</p>
+        </div>
+        <div class="hot-item">
+          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9773.jpg?v=1758513980" alt="BeachCore Keychain"/>
+          <p>BeachCore Keychain</p>
+        </div>
+        <div class="hot-item">
+          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/4A60AADF-9A2C-44DD-B103-F6BF2828D63B.jpg?v=1758678639" alt="Heart Keychain"/>
+          <p>Heart Keychain</p>
+        </div>
+        <div class="hot-item">
+          <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9795.jpg?v=1758639222" alt="Scrunchies"/>
+          <p>Scrunchies</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- About Me -->
+  <!-- ABOUT -->
   <section id="about">
     <div class="bubble">
       <strong>Luxe Lip Glosses ~ A Flawless Finish for Every Face. 💎Hand-Packed | Affordable</strong>
@@ -215,7 +232,7 @@
     </div>
   </section>
 
-  <!-- Social Icons -->
+  <!-- SOCIAL ICONS -->
   <footer>
     <a href="https://www.instagram.com/luxelabcollective/" target="_blank" aria-label="Instagram">
       <svg viewBox="0 0 24 24"><path d="M7 2C4.2386 2 2 4.2386 2 7V17C2 19.7614 4.2386 22 7 22H17C19.7614 22 22 19.7614 22 17V7C22 4.2386 19.7614 2 17 2H7ZM12 7.5C14.4853 7.5 16.5 9.5147 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5C9.5147 16.5 7.5 14.4853 7.5 12C7.5 9.5147 9.5147 7.5 12 7.5ZM18.25 6.5C17.8358 6.5 17.5 6.1642 17.5 5.75C17.5 5.3358 17.8358 5 18.25 5C18.6642 5 19 5.3358 19 5.75C19 6.1642 18.6642 6.5 18.25 6.5Z"/></svg>
@@ -228,170 +245,36 @@
     </a>
   </footer>
 
-  <!-- Admin Login -->
-  <div id="admin-login">
-    <input type="text" id="admin-user" placeholder="Username"/>
-    <input type="password" id="admin-pass" placeholder="Password"/>
-    <button id="admin-login-btn">Login</button>
-  </div>
-
-  <!-- Admin Panel -->
-  <div id="admin-panel">
-    <h3>Admin Panel</h3>
-
-    <label>Instagram Embed Code or URL:</label>
-    <textarea id="insta-input" rows="4" placeholder="Paste oEmbed HTML or IG post URL"></textarea>
-    <button id="save-insta">Save Instagram Embed</button>
-
-    <hr/>
-
-    <h4>What’s Hot Items</h4>
-    <div id="hot-container"></div>
-    <button id="add-hot-btn">Add New What’s Hot Item</button>
-
-    <div id="hot-editor" style="display:none; margin-top:16px;">
-      <input type="text" id="hot-img-url" placeholder="Image URL"/>
-      <input type="text" id="hot-desc" placeholder="Description"/>
-      <button id="save-hot-btn">Save Item</button>
-      <button id="cancel-hot-btn" style="background:#ccc; margin-top:8px;">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Core Script -->
   <script>
+    // SPAWN FALLING PETALS
     document.addEventListener('DOMContentLoaded', () => {
-      // PETALS
       const petalCtr = document.querySelector('.petal-container');
-      const sideL     = document.getElementById('side-left');
-      const sideR     = document.getElementById('side-right');
-      const hero      = document.getElementById('hero');
-      const heroH     = hero.offsetHeight;
+      const sideL = document.getElementById('side-left');
+      const sideR = document.getElementById('side-right');
+      const hero = document.getElementById('hero');
+      const heroH = hero.offsetHeight;
 
-      function spawnPetals(container, count) {
-        for (let i = 0; i < count; i++) {
+      function spawn(container, n) {
+        for (let i = 0; i < n; i++) {
           const p = document.createElement('div');
           p.className = 'petal';
           p.style.left = Math.random() * 100 + 'vw';
           p.style.setProperty('--fall-dur', (4 + Math.random()*4) + 's');
           p.style.setProperty('--sway-dur', (2 + Math.random()*2) + 's');
-          const delay = Math.random() * -10;
-          p.style.animationDelay = \`\${delay}s, \${delay}s\`;
+          const d = Math.random() * -10;
+          p.style.animationDelay = `${d}s, ${d}s`;
           container.appendChild(p);
         }
       }
-      spawnPetals(petalCtr, 60);
-      spawnPetals(sideL, 20);
-      spawnPetals(sideR, 20);
+      spawn(petalCtr, 60);
+      spawn(sideL, 20);
+      spawn(sideR, 20);
 
       window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY > heroH;
-        petalCtr.style.display = scrolled ? 'none' : 'block';
-        sideL.style.display    = scrolled ? 'block' : 'none';
-        sideR.style.display    = scrolled ? 'block' : 'none';
-      });
-
-      // ADMIN LOGIN
-      const loginDiv = document.getElementById('admin-login');
-      const panelDiv = document.getElementById('admin-panel');
-      document.getElementById('admin-login-btn')
-        .addEventListener('click', () => {
-          const user = document.getElementById('admin-user').value;
-          const pass = document.getElementById('admin-pass').value;
-          if (user === 'lux' && pass === 'lux') {
-            loginDiv.style.display = 'none';
-            panelDiv.style.display = 'block';
-          } else {
-            alert('Invalid credentials');
-          }
-        });
-
-      // INSTAGRAM EMBED
-      const instaInput     = document.getElementById('insta-input');
-      const instaContainer = document.getElementById('insta-container');
-
-      function loadInstagram() {
-        const html = localStorage.getItem('instaEmbed') || '';
-        instaInput.value = html;
-        instaContainer.innerHTML = html;
-        if (html.includes('instagram.com')) {
-          const s = document.createElement('script');
-          s.src = '//www.instagram.com/embed.js';
-          s.async = true; s.defer = true;
-          document.body.appendChild(s);
-        }
-      }
-      document.getElementById('save-insta')
-        .addEventListener('click', () => {
-          const val = instaInput.value.trim();
-          localStorage.setItem('instaEmbed', val);
-          loadInstagram();
-        });
-      loadInstagram();
-
-      // WHAT’S HOT ITEMS
-      let hotItems = JSON.parse(localStorage.getItem('hotItems') || '[]');
-      const hotList   = document.getElementById('hot-container');
-      const hotEditor = document.getElementById('hot-editor');
-      let editIndex   = null;
-
-      function renderHot() {
-        hotList.innerHTML = '';
-        hotItems.forEach((item, i) => {
-          const el = document.createElement('div');
-          el.className = 'hot-item';
-          el.innerHTML = \`
-            <img src="\${item.img}" alt="\${item.desc}" />
-            <p>\${item.desc}</p>
-            <button data-i="\${i}" class="edit-hot">Edit</button>
-            <button data-i="\${i}" class="del-hot">Delete</button>
-          \`;
-          hotList.appendChild(el);
-        });
-      }
-      renderHot();
-
-      document.getElementById('add-hot-btn')
-        .addEventListener('click', () => {
-          editIndex = null;
-          hotEditor.style.display = 'block';
-          document.getElementById('hot-img-url').value = '';
-          document.getElementById('hot-desc').value    = '';
-        });
-
-      document.getElementById('cancel-hot-btn')
-        .addEventListener('click', () => hotEditor.style.display = 'none');
-
-      document.getElementById('save-hot-btn')
-        .addEventListener('click', () => {
-          const img  = document.getElementById('hot-img-url').value.trim();
-          const desc = document.getElementById('hot-desc').value.trim();
-          if (!img || !desc) return alert('Both fields are required');
-          if (editIndex === null) {
-            hotItems.push({ img, desc });
-          } else {
-            hotItems[editIndex] = { img, desc };
-          }
-          localStorage.setItem('hotItems', JSON.stringify(hotItems));
-          hotEditor.style.display = 'none';
-          renderHot();
-        });
-
-      hotList.addEventListener('click', (e) => {
-        const i = e.target.dataset.i;
-        if (e.target.classList.contains('edit-hot')) {
-          editIndex = +i;
-          const item = hotItems[i];
-          document.getElementById('hot-img-url').value = item.img;
-          document.getElementById('hot-desc').value    = item.desc;
-          hotEditor.style.display = 'block';
-        }
-        if (e.target.classList.contains('del-hot')) {
-          if (confirm('Delete this item?')) {
-            hotItems.splice(i,1);
-            localStorage.setItem('hotItems', JSON.stringify(hotItems));
-            renderHot();
-          }
-        }
+        const hide = window.scrollY > heroH;
+        petalCtr.style.display = hide ? 'none' : 'block';
+        sideL.style.display   = hide ? 'block': 'none';
+        sideR.style.display   = hide ? 'block': 'none';
       });
     });
   </script>
