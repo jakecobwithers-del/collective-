@@ -4,22 +4,22 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Luxe Lab Collective</title>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap"
     rel="stylesheet"
   />
   <style>
     /* RESET & BASE */
-    * { box-sizing: border-box; margin:0; padding:0; }
-    html, body { height:100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
       font-family: 'Inter', sans-serif;
+      background: #ffe4f8 url('pedals.png') repeat;
+      background-size: 200px 200px;
+      animation: flow 30s linear infinite;
       color: #333;
-      background: url('pedals.png') repeat;
-      background-size: 120px 120px;
-      animation: bg-flow 30s linear infinite;
     }
-    @keyframes bg-flow {
+    @keyframes flow {
       from { background-position: 0 0; }
       to   { background-position: 0 1000px; }
     }
@@ -34,86 +34,100 @@
       height: 80vh;
       text-align: center;
       padding: 0 20px;
+      position: relative;
+      z-index: 1;
     }
     #hero .logo {
-      width: 300px;
+      width: 350px;
       max-width: 80%;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
     #hero h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       color: #c83b7a;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
     #hero p {
       font-size: 1.2rem;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      max-width: 600px;
     }
     #hero .cta {
       display: inline-block;
-      padding: 12px 28px;
+      padding: 14px 32px;
       background: #c83b7a;
       color: #fff;
       border-radius: 8px;
       font-weight: 700;
       transition: background 0.2s;
     }
-    #hero .cta:hover {
-      background: #a22e60;
-    }
+    #hero .cta:hover { background: #a22e60; }
 
-    /* PRODUCT GRID */
-    #products {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px;
+    /* INSTAGRAM FEED (Instafeed.js) */
+    #insta-feed {
+      max-width: 800px;
+      margin: 0 auto 60px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 16px;
     }
-    .product {
-      background: rgba(255,255,255,0.9);
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .product img {
+    #insta-feed img {
       width: 100%;
       display: block;
-    }
-    .info {
-      padding: 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .info h3 {
-      margin: 0 0 8px;
-      font-size: 1.1rem;
-      color: #c83b7a;
-    }
-    .info .price {
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .info button {
-      margin-top: auto;
-      padding: 10px;
-      background: #c83b7a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .info button:hover {
-      background: #a22e60;
+      border-radius: 12px;
     }
 
-    /* FOOTER */
+    /* WHAT'S HOT */
+    #hot {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+    #hot h2 {
+      font-size: 2rem;
+      color: #c83b7a;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    #hot .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+      gap: 12px;
+    }
+    #hot .grid img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* ABOUT */
+    #about {
+      max-width: 800px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+    #about h2 {
+      font-size: 2rem;
+      color: #c83b7a;
+      margin-bottom: 12px;
+    }
+    #about p {
+      margin-bottom: 12px;
+    }
+
+    /* SOCIAL WIDGETS */
+    #social {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .widget {
+      flex: 1 1 280px;
+      max-width: 320px;
+    }
+
     footer {
       text-align: center;
       padding: 24px;
@@ -128,69 +142,81 @@
   <section id="hero">
     <img src="Flower.PNG" alt="Luxe Lab Collective Logo" class="logo"/>
     <h1>Luxe Lab Collective</h1>
-    <p>Shop keychains, scrunchies, mini hair clips & more—curated with passion.</p>
-    <a href="#products" class="cta">Browse All Products</a>
+    <p>Shop our hand-packed lip-glosses, scrunchies, mini hair clips & more—curated with passion.</p>
+    <a href="#insta-feed" class="cta">See Latest IG Video</a>
   </section>
 
-  <!-- PRODUCTS -->
-  <section id="products">
-    <div class="product">
+  <!-- INSTAGRAM FEED -->
+  <section id="insta-feed"></section>
+
+  <!-- WHAT'S HOT -->
+  <section id="hot">
+    <h2>What's Hot</h2>
+    <div class="grid">
       <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9778.jpg?v=1758514351" alt="Rainbow Bear Keychain"/>
-      <div class="info">
-        <h3>Rainbow Bear Keychain Add-On</h3>
-        <p class="price">$8.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
-    </div>
-
-    <div class="product">
       <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9773.jpg?v=1758513980" alt="BeachCore Keychain"/>
-      <div class="info">
-        <h3>BeachCore Keychain Add-On</h3>
-        <p class="price">$8.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
-    </div>
-
-    <div class="product">
       <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/4A60AADF-9A2C-44DD-B103-F6BF2828D63B.jpg?v=1758678639" alt="Heart Keychain"/>
-      <div class="info">
-        <h3>Heart Keychain Add-On</h3>
-        <p class="price">$8.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9776.jpg?v=1758514219" alt="Lovergirl Keychain"/>
-      <div class="info">
-        <h3>Lovergirl Keychain Add-On</h3>
-        <p class="price">$8.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
-    </div>
-
-    <div class="product">
       <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9795.jpg?v=1758639222" alt="Scrunchies"/>
-      <div class="info">
-        <h3>Scrunchies</h3>
-        <p class="price">$12.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
-    </div>
-
-    <div class="product">
-      <img src="https://luxelabcollective.myshopify.com/cdn/shop/files/IMG-9796.jpg?v=1758638942" alt="Mini Hair Clips"/>
-      <div class="info">
-        <h3>Mini Hair Clips</h3>
-        <p class="price">$10.00 AUD</p>
-        <button>Add to Cart</button>
-      </div>
     </div>
   </section>
 
-  <footer>
-    &copy; 2025 Luxe Lab Collective. All rights reserved.
-  </footer>
+  <!-- ABOUT -->
+  <section id="about">
+    <h2>About Luxe Lab Collective</h2>
+    <p><strong>Luxe Lip Glosses ~ A Flawless Finish for Every Face. 💎Hand-Packed | Affordable</strong></p>
+    <p>Welcome to LuxeLab Collective, where beauty meets bold confidence.</p>
+    <h3>About My Business</h3>
+    <p>At LuxeLab Collective, I specialise in creating and selling lip-products and other small beauty items. I'm fifteen and I run, own, and pack every order with love.</p>
+    <h3>More Info</h3>
+    <p>LuxeLab Collective is your destination for high-quality, hand-packed lip-glosses and other luxury lip-products made to elevate your everyday look. My goal? To help you feel confident, radiant, and unapologetically YOU.</p>
+    <h3>💄 Glosses That Glow</h3>
+    <p>From ultra-glossy to subtle shimmer, our lip-glosses are lightweight, hydrating, and designed to keep your lips moist and luxurious. There's something for everyone at LuxeLab.</p>
+  </section>
+
+  <!-- SOCIAL WIDGETS -->
+  <section id="social">
+    <!-- Instagram embed (requires your userId & accessToken) -->
+    <div class="widget">
+      <h3>Instagram</h3>
+      <div id="instafeed-widget"></div>
+    </div>
+
+    <!-- TikTok embed -->
+    <div class="widget">
+      <h3>TikTok</h3>
+      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@luxelabcollective" data-embed-from="oembed" style="max-width:320px;">
+        <section><a href="https://www.tiktok.com/@luxelabcollective">@luxelabcollective</a></section>
+      </blockquote>
+    </div>
+
+    <!-- Pinterest embed -->
+    <div class="widget">
+      <h3>Pinterest</h3>
+      <a data-pin-do="embedBoard" data-pin-board-width="320" data-pin-scale-height="240"
+         href="https://au.pinterest.com/luxelabcollective/"></a>
+    </div>
+  </section>
+
+  <footer>&copy; 2025 Luxe Lab Collective. All rights reserved.</footer>
+
+  <!-- SCRIPTS -->
+  <!-- Instafeed.js (to fetch your latest IG media) -->
+  <script src="https://cdn.jsdelivr.net/npm/instafeed.js@2"></script>
+  <script>
+    const feed = new Instafeed({
+      get: 'user',
+      userId: 'YOUR_USER_ID',
+      accessToken: 'YOUR_ACCESS_TOKEN',
+      limit: 1,
+      sortBy: 'most-recent',
+      resolution: 'low_resolution',
+      template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
+    });
+    feed.run();
+  </script>
+
+  <!-- TikTok & Pinterest embed scripts -->
+  <script async src="https://www.tiktok.com/embed.js"></script>
+  <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
 </body>
 </html>
