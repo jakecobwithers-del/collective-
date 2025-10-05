@@ -1,0 +1,12 @@
+{
+    "items": [
+        { "classname": "M4A1", "quantity": 1 },
+        { "classname": "Mag_STANAG_30Rnd", "quantity": 2 },
+        { "classname": "WaterBottle", "quantity": 1 },
+        { "classname": "Apple", "quantity": 3 },
+        { "classname": "HuntingKnife", "quantity": 1 },
+        { "classname": "TTSKOPants", "quantity": 1 },
+        { "classname": "TShirt_Green", "quantity": 1 },
+        { "classname": "CombatBoots_Black", "quantity": 1 }
+    ]
+}
